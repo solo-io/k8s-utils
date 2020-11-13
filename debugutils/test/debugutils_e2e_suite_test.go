@@ -12,10 +12,10 @@ import (
 	"github.com/solo-io/k8s-utils/kubeutils"
 	"k8s.io/client-go/rest"
 
+	"github.com/solo-io/go-utils/testutils"
 	"github.com/solo-io/k8s-utils/installutils/helmchart"
 	"github.com/solo-io/k8s-utils/installutils/kubeinstall"
 	"github.com/solo-io/k8s-utils/installutils/kuberesource"
-	"github.com/solo-io/k8s-utils/testutils"
 	"github.com/solo-io/k8s-utils/testutils/clusterlock"
 	"github.com/solo-io/k8s-utils/testutils/kube"
 )

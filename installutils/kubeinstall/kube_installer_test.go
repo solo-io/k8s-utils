@@ -28,7 +28,7 @@ import (
 	"github.com/solo-io/k8s-utils/installutils/helmchart"
 	"github.com/solo-io/k8s-utils/kubeutils"
 
-	"github.com/solo-io/k8s-utils/testutils"
+	"github.com/solo-io/go-utils/testutils"
 	"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"

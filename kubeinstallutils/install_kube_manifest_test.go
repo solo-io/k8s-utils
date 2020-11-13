@@ -9,6 +9,7 @@ import (
 	"github.com/solo-io/go-utils/testutils"
 	"github.com/solo-io/k8s-utils/kubeinstallutils"
 	"github.com/solo-io/k8s-utils/kubeutils"
+	k8stestutils "github.com/solo-io/k8s-utils/testutils"
 	"github.com/solo-io/k8s-utils/testutils/kube"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -73,7 +74,7 @@ func deployNginx(ctx context.Context, namespace string) error {
 
 	installer := kubeinstallutils.NewKubeInstaller(kube, apiext, namespace)
 
-	kubeObjs, err := kubeinstallutils.ParseKubeManifest(testutils.NginxYaml)
+	kubeObjs, err := kubeinstallutils.ParseKubeManifest(k8stestutils.NginxYaml)
 	if err != nil {
 		return err
 	}

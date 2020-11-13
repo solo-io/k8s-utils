@@ -17,9 +17,9 @@ import (
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/solo-io/go-utils/testutils"
 	"github.com/solo-io/k8s-utils/installutils/helminstall"
 	mock_helminstall "github.com/solo-io/k8s-utils/installutils/helminstall/mocks"
-	"github.com/solo-io/k8s-utils/testutils"
 )
 
 var _ = Describe("Helm Installer", func() {

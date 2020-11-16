@@ -7,13 +7,13 @@ import (
 	"time"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/solo-io/k8s-utils/testutils/runners/consul"
+	"github.com/solo-io/go-utils/testutils/runners/consul"
 
 	"github.com/avast/retry-go"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/solo-io/go-utils/testutils"
 	"github.com/solo-io/k8s-utils/kubeutils"
-	"github.com/solo-io/k8s-utils/testutils"
 	"github.com/solo-io/k8s-utils/testutils/clusterlock"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )

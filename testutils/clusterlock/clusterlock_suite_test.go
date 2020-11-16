@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
+	"github.com/solo-io/go-utils/testutils/runners/consul"
 	"github.com/solo-io/k8s-utils/testutils/clusterlock"
 	"github.com/solo-io/k8s-utils/testutils/kube"
-	"github.com/solo-io/k8s-utils/testutils/runners/consul"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 

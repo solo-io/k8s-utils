@@ -3,7 +3,8 @@ module github.com/solo-io/k8s-utils
 go 1.14
 
 require (
-	cloud.google.com/go v0.40.0
+	cloud.google.com/go v0.56.0
+	cloud.google.com/go/storage v1.6.0
 	contrib.go.opencensus.io/exporter/prometheus v0.1.0
 	github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e // indirect
 	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b
@@ -20,8 +21,7 @@ require (
 	github.com/go-logr/zapr v0.1.1 // indirect
 	github.com/go-openapi/spec v0.19.4 // indirect
 	github.com/gogo/protobuf v1.3.1
-	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
-	github.com/golang/mock v1.3.1
+	github.com/golang/mock v1.4.3
 	github.com/google/go-github/v32 v32.0.0
 	github.com/google/uuid v1.1.1
 	github.com/goph/emperror v0.17.1
@@ -41,21 +41,20 @@ require (
 	github.com/prometheus/client_golang v1.2.1 // indirect
 	github.com/rotisserie/eris v0.1.1
 	github.com/rs/zerolog v1.18.0
-	github.com/solo-io/go-utils v0.19.0
+	github.com/solo-io/go-utils v0.20.0
 	github.com/spf13/afero v1.2.2
 	github.com/spf13/cobra v1.0.0
 	github.com/xenolf/lego v0.3.2-0.20160613233155-a9d8cec0e656 // indirect
 	github.com/yvasiyarov/go-metrics v0.0.0-20150112132944-c25f46c4b940 // indirect
 	github.com/yvasiyarov/gorelic v0.0.6 // indirect
-	go.opencensus.io v0.22.0
+	go.opencensus.io v0.22.4
 	go.uber.org/zap v1.10.0
 	goji.io v2.0.2+incompatible
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	google.golang.org/api v0.6.0
-	google.golang.org/genproto v0.0.0-20191028173616-919d9bdd9fe6 // indirect
-	google.golang.org/grpc v1.27.0
+	google.golang.org/api v0.29.0
+	google.golang.org/grpc v1.30.0
 	gopkg.in/AlecAivazis/survey.v1 v1.8.2
 	gopkg.in/square/go-jose.v1 v1.1.2 // indirect
 	gopkg.in/src-d/go-git.v4 v4.10.0

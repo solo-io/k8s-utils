@@ -6,11 +6,12 @@ package debugutils
 
 import (
 	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	kuberesource "github.com/solo-io/k8s-utils/installutils/kuberesource"
 	v1 "k8s.io/api/core/v1"
 	v10 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	reflect "reflect"
 )
 
 // MockPodFinder is a mock of PodFinder interface

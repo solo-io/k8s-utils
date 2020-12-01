@@ -2,16 +2,13 @@ package debugutils
 
 import (
 	"context"
-	"os"
 	"testing"
 
-	"cloud.google.com/go/storage"
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/k8s-utils/installutils/helmchart"
 	"github.com/solo-io/k8s-utils/installutils/kuberesource"
-	"google.golang.org/api/iterator"
 )
 
 func TestDebugutils(t *testing.T) {
@@ -43,23 +40,4 @@ var (
 		Expect(err).NotTo(HaveOccurred())
 		return nil
 	}, func(data []byte) {})
-
-	_ = SynchronizedAfterSuite(func() {}, func() {
-		ctx := context.Background()
-		client, err := storage.NewClient(ctx)
-		Expect(err).NotTo(HaveOccurred())
-		bucket := client.Bucket("go-utils-test")
-		obj := os.ExpandEnv("$BUILD_ID")
-		it := bucket.Objects(ctx, &storage.Query{
-			Prefix: obj,
-		})
-		for {
-			objAttrs, err := it.Next()
-			if err != nil && err == iterator.Done {
-				break
-			}
-			Expect(err).NotTo(HaveOccurred())
-			Expect(bucket.Object(objAttrs.Name).Delete(ctx)).NotTo(HaveOccurred())
-		}
-	})
 )

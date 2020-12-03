@@ -1,6 +1,7 @@
 package helmchart_test
 
 import (
+	"github.com/golang/protobuf/ptypes/wrappers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
@@ -8,10 +9,11 @@ import (
 )
 
 type Config struct {
-	Namespace *Namespace `json:"namespace,omitempty" desc:"create namespace"`
-	Array     []Array    `json:"array,omitempty"`
-	Bool      bool       `json:"booleanValue,omitempty"`
-	Complex   Complex    `json:"complex,omitempty"`
+	Namespace *Namespace          `json:"namespace,omitempty" desc:"create namespace"`
+	Array     []Array             `json:"array,omitempty"`
+	Bool      bool                `json:"booleanValue,omitempty"`
+	Complex   Complex             `json:"complex,omitempty"`
+	Proto     *wrappers.BoolValue `json:"proto,omitempty"`
 }
 
 type Complex struct {
@@ -61,6 +63,7 @@ var _ = Describe("Docs", func() {
 				DefaultValue: "yes",
 				Description:  "",
 			},
+			{Key: "proto.value", Type: "bool", DefaultValue: "", Description: ""},
 		}
 
 		Expect(expectedDocs).To(Equal(docDesc))

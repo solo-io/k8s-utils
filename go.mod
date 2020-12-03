@@ -22,6 +22,7 @@ require (
 	github.com/go-openapi/spec v0.19.4 // indirect
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/mock v1.4.3
+	github.com/golang/protobuf v1.4.2
 	github.com/google/go-github/v32 v32.0.0
 	github.com/google/uuid v1.1.1
 	github.com/goph/emperror v0.17.1
@@ -55,6 +56,7 @@ require (
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/api v0.29.0
 	google.golang.org/grpc v1.30.0
+	google.golang.org/protobuf v1.25.0
 	gopkg.in/AlecAivazis/survey.v1 v1.8.2
 	gopkg.in/square/go-jose.v1 v1.1.2 // indirect
 	gopkg.in/src-d/go-git.v4 v4.10.0

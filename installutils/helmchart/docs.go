@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"unicode"
+
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type HelmValue struct {
@@ -71,6 +74,16 @@ func docReflect(addValue addValue, path []string, desc string, typ reflect.Type,
 		for i := 0; i < typ.NumField(); i++ {
 			field := typ.Field(i)
 			jsonTag := field.Tag.Get("json")
+			// golang/proto v4 creates infinite reflect loops, need to s
+			// kip the private fields
+			message := reflect.TypeOf((*interface{ ProtoReflect() protoreflect.Message })(nil)).Elem()
+			if reflect.PtrTo(typ).Implements(message) {
+				// Check if field is private
+				firstChar := field.Name[0]
+				if !unicode.IsUpper(rune(firstChar)) {
+					continue
+				}
+			}
 			parts := strings.Split(jsonTag, ",")
 			jsonName := parts[0]
 			desc := field.Tag.Get("desc")

@@ -155,8 +155,9 @@ func (h *SoloTestHelper) InstallGloo(ctx context.Context, deploymentType string,
 	for _, opt := range options {
 		opt(io)
 	}
-	if err := exec.RunCommand(h.RootDir, io.Verbose, io.GlooctlCommand...); err != nil {
-		return errors.Wrapf(err, "error while installing gloo")
+
+	if err := glooctlInstallWithTimeout(h.RootDir, io, time.Minute*2); err != nil {
+		return errors.Wrapf(err, "error running glooctl install command")
 	}
 
 	if h.TestRunner != nil {
@@ -166,6 +167,32 @@ func (h *SoloTestHelper) InstallGloo(ctx context.Context, deploymentType string,
 		if err := h.TestRunner.Deploy(timeout); err != nil {
 			return errors.Wrapf(err, "deploying testrunner")
 		}
+	}
+	return nil
+}
+
+// Wait for the glooctl install command to respond, err on timeout.
+// The command returns as soon as the certgen pod starts, which should
+// only be delayed if there's an issue pulling the certgen docker image.
+// Without this timeout, it would just hang indefinitely.
+func glooctlInstallWithTimeout(rootDir string, io *InstallOptions, timeout time.Duration) error {
+	runResponse := make(chan error, 1)
+	go func() {
+		err := exec.RunCommand(rootDir, io.Verbose, io.GlooctlCommand...)
+		if err != nil {
+			runResponse <- errors.Wrapf(err, "error while installing gloo")
+		}
+		runResponse <- nil
+	}()
+
+	select {
+	case <-runResponse:
+		err := <-runResponse
+		if err != nil {
+			return err
+		}
+	case <-time.After(timeout):
+		return errors.New("timeout - did something go wrong fetching the docker images?")
 	}
 	return nil
 }

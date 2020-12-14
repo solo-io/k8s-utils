@@ -172,8 +172,9 @@ func (h *SoloTestHelper) InstallGloo(ctx context.Context, deploymentType string,
 }
 
 // Wait for the glooctl install command to respond, err on timeout.
-// The command returns as soon as the certgen pod starts, which should
-// only be delayed if there's an issue pulling the certgen docker image.
+// The command returns as soon as certgen completes and all other
+// deployments have been applied, which should only be delayed if
+// there's an issue pulling the certgen docker image.
 // Without this timeout, it would just hang indefinitely.
 func glooctlInstallWithTimeout(rootDir string, io *InstallOptions, timeout time.Duration) error {
 	runResponse := make(chan error, 1)

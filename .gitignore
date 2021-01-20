@@ -1,0 +1,18 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# IDEA files
+*.idea/
+.vscode
+
+# Spurious files
+.DS_Store
+.vendor-new/
+
+# ignore intermediate files that gomock sometimes generates
+**/gomock_reflect*
+id_rsa

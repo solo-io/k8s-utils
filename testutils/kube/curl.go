@@ -8,6 +8,9 @@ import (
 	"io/ioutil"
 
 	"github.com/solo-io/go-utils/testutils"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 
 	. "github.com/onsi/gomega"
 )
@@ -22,6 +25,16 @@ func CurlWithEphemeralPod(ctx context.Context, logger io.Writer, kubecontext, fr
 	args = append([]string{"exec",
 		"--container=curl", frompod, "-n", fromns, "--", "curl", "--connect-timeout", "1", "--max-time", "5"}, args...)
 	return execute(ctx, logger, kubecontext, args...)
+}
+
+// labelSelector is a string map e.g. gloo=gateway-proxy
+func FindPodNameByLabel(cfg *rest.Config, ctx context.Context, ns, labelSelector string) string {
+	clientset, err := kubernetes.NewForConfig(cfg)
+	Expect(err).NotTo(HaveOccurred())
+	pl, err := clientset.CoreV1().Pods(ns).List(ctx, v1.ListOptions{LabelSelector: labelSelector})
+	Expect(err).NotTo(HaveOccurred())
+	Expect(pl.Items).NotTo(BeEmpty())
+	return pl.Items[0].GetName()
 }
 
 func WaitForRollout(ctx context.Context, logger io.Writer, kubecontext, ns, deployment string) {

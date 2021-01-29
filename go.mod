@@ -3,11 +3,7 @@ module github.com/solo-io/k8s-utils
 go 1.14
 
 require (
-	cloud.google.com/go v0.56.0
-	cloud.google.com/go/storage v1.6.0
-	contrib.go.opencensus.io/exporter/prometheus v0.1.0
 	github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e // indirect
-	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b
 	github.com/avast/retry-go v2.2.0+incompatible
 	github.com/bugsnag/bugsnag-go v1.5.0 // indirect
 	github.com/docker/go-metrics v0.0.0-20181218153428-b84716841b82 // indirect
@@ -15,7 +11,6 @@ require (
 	github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c // indirect
 	github.com/emicklei/go-restful v2.11.1+incompatible // indirect
 	github.com/evanphx/json-patch v4.5.0+incompatible
-	github.com/fgrosse/zaptest v1.1.0
 	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-logr/zapr v0.1.1 // indirect
@@ -28,39 +23,19 @@ require (
 	github.com/goph/emperror v0.17.1
 	github.com/gorilla/handlers v1.4.0 // indirect
 	github.com/hashicorp/consul/api v1.1.0
-	github.com/hinshun/vt10x v0.0.0-20180809195222-d55458df857c
-	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
-	github.com/k0kubun/pp v2.3.0+incompatible
-	github.com/mitchellh/go-homedir v1.1.0
-	github.com/mitchellh/hashstructure v1.0.0
 	github.com/onsi/ginkgo v1.12.1
 	github.com/onsi/gomega v1.10.1
-	github.com/palantir/go-baseapp v0.2.0
-	github.com/palantir/go-githubapp v0.5.0
-	github.com/pelletier/go-toml v1.2.0
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.2.1 // indirect
 	github.com/rotisserie/eris v0.1.1
-	github.com/rs/zerolog v1.18.0
 	github.com/solo-io/go-utils v0.20.0
 	github.com/spf13/afero v1.2.2
-	github.com/spf13/cobra v1.0.0
 	github.com/xenolf/lego v0.3.2-0.20160613233155-a9d8cec0e656 // indirect
 	github.com/yvasiyarov/go-metrics v0.0.0-20150112132944-c25f46c4b940 // indirect
 	github.com/yvasiyarov/gorelic v0.0.6 // indirect
-	go.opencensus.io v0.22.4
 	go.uber.org/zap v1.10.0
-	goji.io v2.0.2+incompatible
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
-	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	google.golang.org/api v0.29.0
-	google.golang.org/grpc v1.30.0
 	google.golang.org/protobuf v1.25.0
-	gopkg.in/AlecAivazis/survey.v1 v1.8.2
 	gopkg.in/square/go-jose.v1 v1.1.2 // indirect
-	gopkg.in/src-d/go-git.v4 v4.10.0
-	gopkg.in/yaml.v2 v2.3.0
 	helm.sh/helm/v3 v3.2.4
 	k8s.io/api v0.18.6
 	k8s.io/apiextensions-apiserver v0.18.6

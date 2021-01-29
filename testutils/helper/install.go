@@ -187,11 +187,8 @@ func glooctlInstallWithTimeout(rootDir string, io *InstallOptions, timeout time.
 	}()
 
 	select {
-	case <-runResponse:
-		err := <-runResponse
-		if err != nil {
-			return err
-		}
+	case err := <-runResponse:
+		return err // can be nil
 	case <-time.After(timeout):
 		return errors.New("timeout - did something go wrong fetching the docker images?")
 	}

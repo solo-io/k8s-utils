@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	defaultTestRunnerImage = "soloio/testrunner:latest"
+	defaultTestRunnerImage = "curlimages/curl@sha256:aa45e9d93122a3cfdf8d7de272e2798ea63733eeee6d06bd2ee4f2f8c4027d7c"
 	TestrunnerName         = "testrunner"
 	TestRunnerPort         = 1234
 

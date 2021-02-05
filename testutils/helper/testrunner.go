@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	defaultTestRunnerImage = "ashwang168/testrunner:awang"
+	defaultTestRunnerImage = "ashwang168/testrunner:awang_test"
 	TestrunnerName         = "testrunner"
 	TestRunnerPort         = 1234
 

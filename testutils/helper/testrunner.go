@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	defaultTestRunnerImage = "soloio/testrunner:testing-fce0bfb9"
+	defaultTestRunnerImage = "ashwang168/testrunner:awang"
 	TestrunnerName         = "testrunner"
 	TestRunnerPort         = 1234
 

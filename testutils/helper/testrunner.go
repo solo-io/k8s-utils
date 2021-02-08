@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	defaultTestRunnerImage = "ashwang168/testrunner:awang_test2"
+	defaultTestRunnerImage = "quay.io/solo-io/testrunner:v1.7.0-beta17"
 	TestrunnerName         = "testrunner"
 	TestRunnerPort         = 1234
 

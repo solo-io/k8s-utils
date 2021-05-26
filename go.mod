@@ -27,7 +27,7 @@ require (
 	github.com/onsi/gomega v1.10.1
 	github.com/pkg/errors v0.9.1
 	github.com/rotisserie/eris v0.1.1
-	github.com/solo-io/go-utils v0.21.6-0.20210525213056-a63ad8750c56
+	github.com/solo-io/go-utils v0.21.6
 	github.com/spf13/afero v1.2.2
 	github.com/xenolf/lego v0.3.2-0.20160613233155-a9d8cec0e656 // indirect
 	github.com/yvasiyarov/go-metrics v0.0.0-20150112132944-c25f46c4b940 // indirect

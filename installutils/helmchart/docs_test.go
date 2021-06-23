@@ -30,49 +30,57 @@ type Array struct {
 
 var _ = Describe("Docs", func() {
 	It("should document helm values", func() {
-		c := Config{
-			Namespace: &Namespace{Create: true},
-			Bool:      true,
-			Complex:   Complex{SomeMap: map[string]string{"foo": "1", "bar": "2"}},
-		}
-		docDesc := Doc(c)
+		runTest := func(attempt int) {
+			c := Config{
+				Namespace: &Namespace{Create: true},
+				Bool:      true,
+				Complex:   Complex{SomeMap: map[string]string{"foo": "1", "bar": "2"}},
+			}
+			docDesc := Doc(c)
 
-		expectedDocs := HelmValues{
-			{
-				Key:          "namespace.create",
-				Type:         "bool",
-				DefaultValue: "true",
-				Description:  "create the installation namespace",
-			},
-			{
-				Key:          "array[].something",
-				Type:         "string",
-				DefaultValue: "",
-				Description:  "create something",
-			},
-			{Key: "booleanValue", Type: "bool", DefaultValue: "true", Description: ""},
-			{
-				Key:          "complex.items.NAME",
-				Type:         "string",
-				DefaultValue: "",
-				Description:  "",
-			},
-			{
-				Key:          "complex.items.foo",
-				Type:         "string",
-				DefaultValue: "1",
-				Description:  "",
-			},
-			{
-				Key:          "complex.items.bar",
-				Type:         "string",
-				DefaultValue: "2",
-				Description:  "",
-			},
-			{Key: "proto.value", Type: "bool", DefaultValue: "", Description: ""},
+			expectedDocs := HelmValues{
+				{
+					Key:          "namespace.create",
+					Type:         "bool",
+					DefaultValue: "true",
+					Description:  "create the installation namespace",
+				},
+				{
+					Key:          "array[].something",
+					Type:         "string",
+					DefaultValue: "",
+					Description:  "create something",
+				},
+				{Key: "booleanValue", Type: "bool", DefaultValue: "true", Description: ""},
+				{
+					Key:          "complex.items.NAME",
+					Type:         "string",
+					DefaultValue: "",
+					Description:  "",
+				},
+				{
+					Key:          "complex.items.bar",
+					Type:         "string",
+					DefaultValue: "2",
+					Description:  "",
+				},
+				{
+					Key:          "complex.items.foo",
+					Type:         "string",
+					DefaultValue: "1",
+					Description:  "",
+				},
+				{Key: "proto.value", Type: "bool", DefaultValue: "", Description: ""},
+			}
+
+			Expect(expectedDocs).To(Equal(docDesc), "failed on attempt %v", attempt) // order matters
 		}
 
-		Expect(expectedDocs).To(Equal(docDesc))
+		// can take many iterations to fail
+		for i := 0; i < 40; i++ {
+			// ensure that docsgen is deterministic
+			runTest(i)
+		}
 	})
 
 	It("should print markdown", func() {

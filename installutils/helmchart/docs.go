@@ -35,8 +35,7 @@ func Doc(s interface{}) HelmValues {
 	cfgT := reflect.ValueOf(s)
 	addValue := func(v HelmValue) { values = append(values, v) }
 	docReflect(addValue, nil, "", cfgT.Type(), cfgT)
-
-	return HelmValues(values)
+	return values
 }
 
 func docReflect(addValue addValue, path []string, desc string, typ reflect.Type, val reflect.Value) {
@@ -53,15 +52,15 @@ func docReflect(addValue addValue, path []string, desc string, typ reflect.Type,
 
 			if (val != reflect.Value{}) {
 				for _, k := range val.MapKeys() {
-					path = append(path, k.String())
+					pathK := append(path, k.String())
 					defaultVal := val.MapIndex(k)
 					if typ.Elem().Kind() <= reflect.Float64 || typ.Elem().Kind() == reflect.String {
-						// primitve type, print it as default value
+						// primitive type, print it as default value
 						valStr := valToString(defaultVal)
-						addValue(HelmValue{Key: strings.Join(path, "."), Type: typ.Elem().Kind().String(), DefaultValue: valStr, Description: desc})
+						addValue(HelmValue{Key: strings.Join(pathK, "."), Type: typ.Elem().Kind().String(), DefaultValue: valStr, Description: desc})
 					} else {
-						// non primitive type, decend
-						docReflect(addValue, path, desc, typ.Elem(), val.MapIndex(k))
+						// non primitive type, descend
+						docReflect(addValue, pathK, desc, typ.Elem(), val.MapIndex(k))
 					}
 				}
 			}
@@ -74,8 +73,7 @@ func docReflect(addValue addValue, path []string, desc string, typ reflect.Type,
 		for i := 0; i < typ.NumField(); i++ {
 			field := typ.Field(i)
 			jsonTag := field.Tag.Get("json")
-			// golang/proto v4 creates infinite reflect loops, need to s
-			// kip the private fields
+			// golang/proto v4 creates infinite reflect loops, need to skip the private fields
 			message := reflect.TypeOf((*interface{ ProtoReflect() protoreflect.Message })(nil)).Elem()
 			if reflect.PtrTo(typ).Implements(message) {
 				// Check if field is private

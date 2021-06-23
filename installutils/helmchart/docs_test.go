@@ -33,7 +33,7 @@ var _ = Describe("Docs", func() {
 		c := Config{
 			Namespace: &Namespace{Create: true},
 			Bool:      true,
-			Complex:   Complex{SomeMap: map[string]string{"default": "yes"}},
+			Complex:   Complex{SomeMap: map[string]string{"foo": "1", "bar": "2"}},
 		}
 		docDesc := Doc(c)
 
@@ -58,9 +58,15 @@ var _ = Describe("Docs", func() {
 				Description:  "",
 			},
 			{
-				Key:          "complex.items.default",
+				Key:          "complex.items.foo",
 				Type:         "string",
-				DefaultValue: "yes",
+				DefaultValue: "1",
+				Description:  "",
+			},
+			{
+				Key:          "complex.items.bar",
+				Type:         "string",
+				DefaultValue: "2",
 				Description:  "",
 			},
 			{Key: "proto.value", Type: "bool", DefaultValue: "", Description: ""},

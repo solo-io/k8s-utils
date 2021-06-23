@@ -3,6 +3,7 @@ package helmchart
 import (
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 	"unicode"
 
@@ -51,7 +52,13 @@ func docReflect(addValue addValue, path []string, desc string, typ reflect.Type,
 			docReflect(addValue, append(path, "NAME"), desc, typ.Elem(), reflect.Value{})
 
 			if (val != reflect.Value{}) {
-				for _, k := range val.MapKeys() {
+
+				iter := val.MapKeys()
+				sort.Slice(iter, func(i, j int) bool {
+					return iter[i].String() < iter[j].String()
+				})
+
+				for _, k := range iter {
 					pathK := append(path, k.String())
 					defaultVal := val.MapIndex(k)
 					if typ.Elem().Kind() <= reflect.Float64 || typ.Elem().Kind() == reflect.String {

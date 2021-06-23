@@ -9,7 +9,6 @@ import (
 	errors "github.com/rotisserie/eris"
 )
 
-
 type NamespacedDumpCommandGenerator func(namespace string) []string
 
 func KubeDumpOnFail(out io.Writer, namespaces []string, additionalCommands NamespacedDumpCommandGenerator) func() {

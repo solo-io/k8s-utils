@@ -397,7 +397,7 @@ func GetAppLabels(appName, category string) map[string]string {
 func GetContainerSpec(registry, name, tag string, envVars ...v1.EnvVar) ContainerSpec {
 	return ContainerSpec{
 		Name:    name,
-		Image:   fmt.Sprintf("%s:%s", filepath.Join(registry, name), tag),
+		Image:   fmt.Sprintf("%s:%s", filepath.ToSlash(filepath.Join(registry, name)), tag),
 		EnvVars: envVars,
 	}
 }

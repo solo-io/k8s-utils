@@ -36,7 +36,7 @@ func WaitForNamespaceTeardownWithClient(ctx context.Context, ns string, client k
 }
 
 func WaitUntilClusterPodsRunning(ctx context.Context, timeout time.Duration, kubeconfig, kubecontext, namespace string, podPrefixes ...string) error {
-	return waitUntilPodsRunning(ctx, MustKubeClientWithContext(kubeconfig, kubecontext), timeout, namespace, podPrefixes...)
+	return waitUntilPodsRunning(ctx, MustKubeClientFromContext(kubeconfig, kubecontext), timeout, namespace, podPrefixes...)
 }
 
 func WaitUntilPodsRunning(ctx context.Context, timeout time.Duration, namespace string, podPrefixes ...string) error {

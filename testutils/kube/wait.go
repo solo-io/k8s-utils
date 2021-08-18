@@ -35,8 +35,16 @@ func WaitForNamespaceTeardownWithClient(ctx context.Context, ns string, client k
 	}, time.Second*180).Should(BeTrue())
 }
 
+func WaitUntilClusterPodsRunning(ctx context.Context, timeout time.Duration, kubeconfig, kubecontext, namespace string, podPrefixes ...string) error {
+	return waitUntilPodsRunning(ctx, MustKubeClientFromContext(kubeconfig, kubecontext), timeout, namespace, podPrefixes...)
+}
+
 func WaitUntilPodsRunning(ctx context.Context, timeout time.Duration, namespace string, podPrefixes ...string) error {
-	pods := MustKubeClient().CoreV1().Pods(namespace)
+	return waitUntilPodsRunning(ctx, MustKubeClient(), timeout, namespace, podPrefixes...)
+}
+
+func waitUntilPodsRunning(ctx context.Context, kubeClient kubernetes.Interface, timeout time.Duration, namespace string, podPrefixes ...string) error {
+	pods := kubeClient.CoreV1().Pods(namespace)
 	podsWithPrefixReady := func(prefix string) (bool, error) {
 		list, err := pods.List(ctx, metav1.ListOptions{})
 		if err != nil {

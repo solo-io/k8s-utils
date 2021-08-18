@@ -74,6 +74,18 @@ func MustKubeClient() kubernetes.Interface {
 	return client
 }
 
+func MustKubeClientWithContext(kubeconfig, kubecontext string) kubernetes.Interface {
+	cfg, err := kubeutils.GetConfigWithContext("", kubeconfig, kubecontext)
+	if err != nil {
+		contextutils.LoggerFrom(context.TODO()).Fatalw("failed to get kube config", zap.Error(err))
+	}
+	client, err := kubernetes.NewForConfig(cfg)
+	if err != nil {
+		contextutils.LoggerFrom(context.TODO()).Fatalw("failed to create kube client", zap.Error(err))
+	}
+	return client
+}
+
 func KubeClient() (kubernetes.Interface, error) {
 	cfg, err := kubeutils.GetConfig("", os.Getenv("KUBECONFIG"))
 	if err != nil {

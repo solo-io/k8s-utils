@@ -30,8 +30,6 @@ const (
 <li><a href="mnt/">mnt/</a>
 <li><a href="opt/">opt/</a>
 <li><a href="proc/">proc/</a>
-<li><a href="product_name">product_name</a>
-<li><a href="product_uuid">product_uuid</a>
 <li><a href="root/">root/</a>
 <li><a href="root.crt">root.crt</a>
 <li><a href="run/">run/</a>
@@ -46,7 +44,6 @@ const (
 </body>
 </html>`
 )
-
 
 func NewTestRunner(namespace string) (*testRunner, error) {
 	testContainer, err := newTestContainer(namespace, defaultTestRunnerImage, TestrunnerName, TestRunnerPort)

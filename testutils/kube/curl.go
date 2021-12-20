@@ -15,7 +15,19 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func CurlWithEphemeralPod(ctx context.Context, logger io.Writer, kubeContext, fromNs, fromPod string, args ...string) string {
+func CurlWithEphemeralPod(ctx context.Context, logger io.Writer, kubecontext, fromns, frompod string, args ...string) string {
+	createargs := []string{"alpha", "debug", "--quiet",
+		"--image=curlimages/curl@sha256:aa45e9d93122a3cfdf8d7de272e2798ea63733eeee6d06bd2ee4f2f8c4027d7c",
+		"--container=curl", frompod, "-n", fromns, "--", "sleep", "10h"}
+	// Execute curl commands from the same pod each time to avoid creating a burdensome number of ephemeral pods.
+	// create the curl pod; we do this every time and it will only work the first time, so ignore failures
+	executeNoFail(ctx, logger, kubecontext, createargs...)
+	args = append([]string{"exec",
+		"--container=curl", frompod, "-n", fromns, "--", "curl", "--connect-timeout", "1", "--max-time", "5"}, args...)
+	return execute(ctx, logger, kubecontext, args...)
+}
+
+func CurlWithEphemeralPodStable(ctx context.Context, logger io.Writer, kubeContext, fromNs, fromPod string, args ...string) string {
 	createArgs := []string{
 		"debug",
 		"--quiet",

@@ -1,0 +1,5 @@
+changelog:
+- type: FIX
+  issueLink: https://github.com/solo-io/k8s-utils/issues/17
+  description: >
+    Upgrade in-code dependencies for CRD version from `v1beta1` to `v1`.

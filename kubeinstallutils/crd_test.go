@@ -3,12 +3,13 @@ package kubeinstallutils_test
 import (
 	"context"
 
+	apiv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gstruct"
 	"github.com/solo-io/k8s-utils/kubeinstallutils"
 	"github.com/solo-io/k8s-utils/kubeutils"
-	"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiexts "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
@@ -35,7 +36,7 @@ spec:
 
 var _ = Describe("Crd", func() {
 	var (
-		testCrds []*v1beta1.CustomResourceDefinition
+		testCrds []*apiv1.CustomResourceDefinition
 		apiExts  apiexts.Interface
 	)
 	BeforeEach(func() {
@@ -56,7 +57,7 @@ var _ = Describe("Crd", func() {
 	It("creates crds", func() {
 		err := kubeinstallutils.CreateCrds(context.Background(), apiExts, testCrds...)
 		Expect(err).NotTo(HaveOccurred())
-		crdList, err := apiExts.ApiextensionsV1beta1().CustomResourceDefinitions().List(context.Background(), v1.ListOptions{})
+		crdList, err := apiExts.ApiextensionsV1().CustomResourceDefinitions().List(context.Background(), v1.ListOptions{})
 		Expect(err).NotTo(HaveOccurred())
 		for _, testCrd := range testCrds {
 			var found bool

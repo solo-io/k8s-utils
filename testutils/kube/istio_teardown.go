@@ -58,11 +58,11 @@ func TeardownClusterResourcesWithPrefix(ctx context.Context, kube kubernetes.Int
 	exts, err := apiexts.NewForConfig(cfg)
 	Expect(err).NotTo(HaveOccurred())
 
-	crds, err := exts.ApiextensionsV1beta1().CustomResourceDefinitions().List(ctx, metav1.ListOptions{})
+	crds, err := exts.ApiextensionsV1().CustomResourceDefinitions().List(ctx, metav1.ListOptions{})
 	if err == nil {
 		for _, cr := range crds.Items {
 			if strings.Contains(cr.Name, prefix) {
-				exts.ApiextensionsV1beta1().CustomResourceDefinitions().Delete(ctx, cr.Name, v1.DeleteOptions{})
+				exts.ApiextensionsV1().CustomResourceDefinitions().Delete(ctx, cr.Name, v1.DeleteOptions{})
 			}
 		}
 	}

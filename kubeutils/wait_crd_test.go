@@ -24,6 +24,7 @@ var _ = Describe("WaitCrd", func() {
 		Expect(err).NotTo(HaveOccurred())
 		api, err = apiexts.NewForConfig(cfg)
 		Expect(err).NotTo(HaveOccurred())
+		preserveUnknownFields := true
 		crd, err := api.ApiextensionsV1().CustomResourceDefinitions().Create(ctx, &apiv1.CustomResourceDefinition{
 			ObjectMeta: v1.ObjectMeta{Name: "somethings.test.solo.io"},
 			Spec: apiv1.CustomResourceDefinitionSpec{
@@ -33,9 +34,16 @@ var _ = Describe("WaitCrd", func() {
 					Kind:       "Something",
 					ShortNames: []string{"st"},
 				},
+				Scope: apiv1.NamespaceScoped,
 				Versions: []apiv1.CustomResourceDefinitionVersion{
 					{
-						Name: "v1",
+						Name:    "v1",
+						Storage: true,
+						Schema: &apiv1.CustomResourceValidation{
+							OpenAPIV3Schema: &apiv1.JSONSchemaProps{
+								XPreserveUnknownFields: &preserveUnknownFields,
+							},
+						},
 					},
 				},
 			},

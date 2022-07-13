@@ -1,0 +1,5 @@
+changelog:
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: emicklei
+    dependencyRepo: go-restful
+    dependencyTag: v8.8.0

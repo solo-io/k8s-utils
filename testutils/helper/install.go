@@ -86,21 +86,25 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	}
 
 	// Get chart version
-	version, err := getChartVersion(testConfig)
-	if err != nil {
-		return nil, errors.Wrapf(err, "getting Helm chart version")
+	if testConfig.ReleasedVersion != "" {
+		version, err := getChartVersion(testConfig)
+		if err != nil {
+			return nil, errors.Wrapf(err, "getting Helm chart version")
+		}
+		testConfig.version = version
+	} else {
+		testConfig.version = testConfig.ReleasedVersion
 	}
-	testConfig.version = version
-
 	// Default the install namespace to the chart version.
 	// Currently the test chart version built in CI contains the build id, so the namespace will be unique).
 	if testConfig.InstallNamespace == "" {
-		testConfig.InstallNamespace = version
+		testConfig.InstallNamespace = testConfig.version
 	}
 
 	// Optionally, initialize a test runner
 	var testRunner *testRunner
 	if testConfig.DeployTestRunner {
+		var err error
 		testRunner, err = NewTestRunner(testConfig.InstallNamespace)
 		if err != nil {
 			return nil, errors.Wrapf(err, "initializing testrunner")

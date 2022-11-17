@@ -86,7 +86,7 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	}
 
 	// Get chart version
-	if testConfig.ReleasedVersion != "" {
+	if testConfig.ReleasedVersion == "" {
 		version, err := getChartVersion(testConfig)
 		if err != nil {
 			return nil, errors.Wrapf(err, "getting Helm chart version")

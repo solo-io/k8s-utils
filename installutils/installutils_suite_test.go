@@ -8,6 +8,7 @@ import (
 )
 
 func TestInstallutils(t *testing.T) {
-	RegisterFailHandler(Fail)
+//
+RegisterFailHandler(Fail)
 	RunSpecs(t, "Installutils Suite")
 }

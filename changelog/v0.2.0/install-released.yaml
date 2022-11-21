@@ -1,0 +1,11 @@
+changelog:
+  - type: NEW_FEATURE
+    issueLink: https://github.com/solo-io/solo-projects/issues/4191
+    resolvesIssue: false
+    description: Install released versions of gloo.
+  - type: DEPENDENCY_BUMP
+    dependencyRepo: go
+    dependencyTag: v1.18.2
+    dependencyOwner: golang
+    description: >
+      Run tests with go 1.18.2 

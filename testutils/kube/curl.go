@@ -27,6 +27,40 @@ func CurlWithEphemeralPod(ctx context.Context, logger io.Writer, kubecontext, fr
 	return execute(ctx, logger, kubecontext, args...)
 }
 
+func CurlWithEphemeralPodStable(ctx context.Context, logger io.Writer, kubeContext, fromNs, fromPod string, args ...string) string {
+	createArgs := []string{
+		"debug",
+		"--quiet",
+		"--image=curlimages/curl@sha256:aa45e9d93122a3cfdf8d7de272e2798ea63733eeee6d06bd2ee4f2f8c4027d7c",
+		"--container=curl",
+		"--image-pull-policy=IfNotPresent",
+		fromPod,
+		"-n",
+		fromNs,
+		"--",
+		"sleep",
+		"10h",
+	}
+	// Execute curl commands from the same pod each time to avoid creating a burdensome number of ephemeral pods.
+	// create the curl pod; we do this every time and it will only work the first time, so ignore failures
+	_, _ = executeNoFail(ctx, logger, kubeContext, createArgs...)
+
+	args = append([]string{
+		"exec",
+		"--container=curl",
+		fromPod,
+		"-n",
+		fromNs,
+		"--",
+		"curl",
+		"--connect-timeout",
+		"1",
+		"--max-time",
+		"5",
+	}, args...)
+	return execute(ctx, logger, kubeContext, args...)
+}
+
 // labelSelector is a string map e.g. gloo=gateway-proxy
 func FindPodNameByLabel(cfg *rest.Config, ctx context.Context, ns, labelSelector string) string {
 	clientset, err := kubernetes.NewForConfig(cfg)

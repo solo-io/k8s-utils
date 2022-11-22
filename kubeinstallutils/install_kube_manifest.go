@@ -12,7 +12,7 @@ import (
 	core "k8s.io/api/core/v1"
 	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 	rbac "k8s.io/api/rbac/v1"
-	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiexts "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -94,7 +94,7 @@ func (k *kubeInstaller) Create(ctx context.Context, obj runtime.Object) error {
 		_, err := kube.ExtensionsV1beta1().DaemonSets(namespace).Create(ctx, obj, metav1.CreateOptions{})
 		return err
 	case *apiextensions.CustomResourceDefinition:
-		_, err := exts.ApiextensionsV1beta1().CustomResourceDefinitions().Create(ctx, obj, metav1.CreateOptions{})
+		_, err := exts.ApiextensionsV1().CustomResourceDefinitions().Create(ctx, obj, metav1.CreateOptions{})
 		return err
 	case *v1beta1.MutatingWebhookConfiguration:
 		_, err := kube.AdmissionregistrationV1beta1().MutatingWebhookConfigurations().Create(ctx, obj, metav1.CreateOptions{})
@@ -227,7 +227,7 @@ func (k *kubeInstaller) Update(ctx context.Context, obj runtime.Object) error {
 		_, err = client.Update(ctx, obj, metav1.UpdateOptions{})
 		return err
 	case *apiextensions.CustomResourceDefinition:
-		client := exts.ApiextensionsV1beta1().CustomResourceDefinitions()
+		client := exts.ApiextensionsV1().CustomResourceDefinitions()
 		obj2, err := client.Get(ctx, obj.Name, metav1.GetOptions{})
 		if err != nil {
 			return err
@@ -294,7 +294,7 @@ func (k *kubeInstaller) Delete(ctx context.Context, obj runtime.Object) error {
 	case *appsv1beta2.DaemonSet:
 		return kube.AppsV1beta2().DaemonSets(namespace).Delete(ctx, obj.Name, metav1.DeleteOptions{})
 	case *apiextensions.CustomResourceDefinition:
-		return exts.ApiextensionsV1beta1().CustomResourceDefinitions().Delete(ctx, obj.Name, metav1.DeleteOptions{})
+		return exts.ApiextensionsV1().CustomResourceDefinitions().Delete(ctx, obj.Name, metav1.DeleteOptions{})
 	case *v1beta1.MutatingWebhookConfiguration:
 		return kube.AdmissionregistrationV1beta1().MutatingWebhookConfigurations().Delete(ctx, obj.Name, metav1.DeleteOptions{})
 	case *autoscaling.HorizontalPodAutoscaler:

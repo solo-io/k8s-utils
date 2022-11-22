@@ -56,7 +56,8 @@ type TestConfig struct {
 	LicenseKey string
 	// Determines whether the test runner pod gets deployed
 	DeployTestRunner bool
-
+	// Install a released version of gloo
+	ReleasedVersion string
 	// If true, glooctl will be run with a -v flag
 	Verbose bool
 
@@ -85,21 +86,25 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	}
 
 	// Get chart version
-	version, err := getChartVersion(testConfig)
-	if err != nil {
-		return nil, errors.Wrapf(err, "getting Helm chart version")
+	if testConfig.ReleasedVersion == "" {
+		version, err := getChartVersion(testConfig)
+		if err != nil {
+			return nil, errors.Wrapf(err, "getting Helm chart version")
+		}
+		testConfig.version = version
+	} else {
+		testConfig.version = testConfig.ReleasedVersion
 	}
-	testConfig.version = version
-
 	// Default the install namespace to the chart version.
 	// Currently the test chart version built in CI contains the build id, so the namespace will be unique).
 	if testConfig.InstallNamespace == "" {
-		testConfig.InstallNamespace = version
+		testConfig.InstallNamespace = testConfig.version
 	}
 
 	// Optionally, initialize a test runner
 	var testRunner *testRunner
 	if testConfig.DeployTestRunner {
+		var err error
 		testRunner, err = NewTestRunner(testConfig.InstallNamespace)
 		if err != nil {
 			return nil, errors.Wrapf(err, "initializing testrunner")
@@ -140,10 +145,13 @@ func (h *SoloTestHelper) InstallGloo(ctx context.Context, deploymentType string,
 	if h.LicenseKey != "" {
 		glooctlCommand = append(glooctlCommand, "enterprise", "--license-key", h.LicenseKey)
 	}
-	glooctlCommand = append(glooctlCommand,
-		"-n", h.InstallNamespace,
-		"-f", filepath.Join(h.TestAssetDir, h.HelmChartName+"-"+h.version+".tgz"))
-
+	if h.ReleasedVersion != "" {
+		glooctlCommand = append(glooctlCommand, "-n", h.InstallNamespace, "--version", h.ReleasedVersion)
+	} else {
+		glooctlCommand = append(glooctlCommand,
+			"-n", h.InstallNamespace,
+			"-f", filepath.Join(h.TestAssetDir, h.HelmChartName+"-"+h.version+".tgz"))
+	}
 	if h.Verbose {
 		glooctlCommand = append(glooctlCommand, "-v")
 	}

@@ -97,19 +97,20 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 		testConfig.InstallNamespace = version
 	}
 
+	testHelper := &SoloTestHelper{
+		TestConfig: &testConfig,
+	}
+
 	// Optionally, initialize a test runner
-	var testRunner *testRunner
 	if testConfig.DeployTestRunner {
-		testRunner, err = NewTestRunner(testConfig.InstallNamespace)
+		testRunnerImpl, err := NewTestRunner(testConfig.InstallNamespace)
 		if err != nil {
 			return nil, errors.Wrapf(err, "initializing testrunner")
 		}
+		testHelper.TestRunner = testRunnerImpl
 	}
 
-	return &SoloTestHelper{
-		TestConfig: &testConfig,
-		TestRunner: testRunner,
-	}, nil
+	return testHelper, nil
 }
 
 // Return the version of the Helm chart
@@ -164,7 +165,7 @@ func (h *SoloTestHelper) InstallGloo(ctx context.Context, deploymentType string,
 		if err := waitForDefaultServiceAccount(ctx, h.InstallNamespace); err != nil {
 			return errors.Wrapf(err, "waiting for default service account")
 		}
-		if err := h.TestRunner.Deploy(timeout); err != nil {
+		if err := h.Deploy(timeout); err != nil {
 			return errors.Wrapf(err, "deploying testrunner")
 		}
 	}
@@ -217,7 +218,7 @@ func (h *SoloTestHelper) UninstallGloo() error {
 func (h *SoloTestHelper) uninstallGloo(all bool) error {
 	if h.TestRunner != nil {
 		log.Debugf("terminating %s...", TestrunnerName)
-		if err := h.TestRunner.Terminate(); err != nil {
+		if err := h.Terminate(); err != nil {
 			// Just log a warning, we don't want to fail
 			log.Warnf("error terminating %s", TestrunnerName)
 		}

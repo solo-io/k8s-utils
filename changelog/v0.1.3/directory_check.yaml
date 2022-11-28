@@ -1,0 +1,5 @@
+changelog:
+  - type: FIX
+    issueLink: https://github.com/solo-io/solo-projects/issues/4191
+    resolvesIssue: false
+    description: Move check for _test and _build directories so that it only occurs when installing from locally built versions.

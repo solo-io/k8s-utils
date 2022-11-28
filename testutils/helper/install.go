@@ -81,12 +81,12 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	if configFunc != nil {
 		testConfig = configFunc(defaults)
 	}
-	if err := validateConfig(testConfig); err != nil {
-		return nil, errors.Wrapf(err, "test config validation failed")
-	}
 
 	// Get chart version
 	if testConfig.ReleasedVersion == "" {
+		if err := validateConfig(testConfig); err != nil {
+			return nil, errors.Wrapf(err, "test config validation failed")
+		}
 		version, err := getChartVersion(testConfig)
 		if err != nil {
 			return nil, errors.Wrapf(err, "getting Helm chart version")

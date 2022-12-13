@@ -8,6 +8,7 @@ package kubeutils
 const SoloClusterAnnotation = "cluster.solo.io/cluster"
 
 type hasAnnotations interface {
+	SetAnnotations(map[string]string)
 	GetAnnotations() map[string]string
 }
 
@@ -17,6 +18,12 @@ func GetClusterName(ha hasAnnotations) string {
 }
 
 // SetClusterName on the retrieved annotations
+// Set annotations which while slow is correct.
 func SetClusterName(ha hasAnnotations, clusterName string) {
-	ha.GetAnnotations()[SoloClusterAnnotation] = clusterName
+	anno := ha.GetAnnotations()
+	if anno == nil {
+		anno = map[string]string{}
+	}
+	anno[SoloClusterAnnotation] = clusterName
+	ha.SetAnnotations(anno)
 }

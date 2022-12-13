@@ -93,7 +93,12 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 		}
 		testConfig.version = version
 	} else {
-		testConfig.version = testConfig.ReleasedVersion
+		// we use the version field as a chart version and tests assume it doesn't have a leading 'v'
+		if testConfig.ReleasedVersion[0] == 'v' {
+			testConfig.version = testConfig.ReleasedVersion[1:]
+		} else {
+			testConfig.version = testConfig.ReleasedVersion
+		}
 	}
 	// Default the install namespace to the chart version.
 	// Currently the test chart version built in CI contains the build id, so the namespace will be unique).

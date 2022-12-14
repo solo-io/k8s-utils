@@ -2,7 +2,7 @@ changelog:
   - type: BREAKING_CHANGE
     issueLink: https://github.com/solo-io/gloo/issues/7071
     resolvesIssue: false
-    description: Clustername override
+    description: Use annotations to store/retrieve cluster names, to support kubernetes versions 1.24 and later where the `metadata.clusterName` field does not exist.
   - type: DEPENDENCY_BUMP
     dependencyOwner: k8s.io
     dependencyRepo: api

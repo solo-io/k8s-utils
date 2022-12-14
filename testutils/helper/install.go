@@ -30,7 +30,6 @@ var defaults = TestConfig{
 	TestAssetDir:          "_test",
 	BuildAssetDir:         "_output",
 	HelmRepoIndexFileName: "index.yaml",
-	GlooctlExecName:       "glooctl-" + runtime.GOOS + "-amd64",
 	DeployTestRunner:      true,
 }
 
@@ -80,6 +79,15 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	testConfig := defaults
 	if configFunc != nil {
 		testConfig = configFunc(defaults)
+	}
+
+	alreadySet := testConfig.GlooctlExecName != ""
+	if goarch, exists := os.LookupEnv("GOARCH"); !alreadySet && exists && (goarch == "amd64" || goarch == "arm64") {
+		testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
+	} else if runtime.GOARCH == "arm64" {
+		testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
+	} else {
+		testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-amd64"
 	}
 
 	// Get chart version

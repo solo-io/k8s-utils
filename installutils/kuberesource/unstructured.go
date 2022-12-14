@@ -9,6 +9,7 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/rotisserie/eris"
 	"github.com/solo-io/go-utils/contextutils"
+	"github.com/solo-io/k8s-utils/kubeutils"
 
 	"github.com/pkg/errors"
 	"k8s.io/api/admissionregistration/v1beta1"
@@ -282,6 +283,6 @@ func zeroGeneratedValues(obj *unstructured.Unstructured) {
 	obj.SetDeletionGracePeriodSeconds(nil)
 	obj.SetFinalizers(nil)
 	obj.SetOwnerReferences(nil)
-	obj.SetClusterName("")
+	kubeutils.SetClusterName(obj, "")
 	delete(obj.Object, "status")
 }

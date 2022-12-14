@@ -183,8 +183,9 @@ require (
 )
 
 replace (
-	// github.com/Azure/go-autorest => github.com/Azure/go-autorest v13.0.0+incompatible
-	github.com/Sirupsen/logrus => github.com/sirupsen/logrus v1.0.5
+
+	// logrus did the rename of their repo which is why we have this 
+	github.com/Sirupsen/logrus => github.com/sirupsen/logrus v1.0.5 
 
 	// pin to the jwt-go fork to fix CVE.
 	// using the pseudo version of github.com/form3tech-oss/jwt-go@v3.2.3 instead of the version directly,

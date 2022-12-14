@@ -13,17 +13,17 @@ type annotationStore interface {
 }
 
 // GetClusterName from within the annotations
-func GetClusterName(ha annotationStore) string {
-	return ha.GetAnnotations()[SoloClusterAnnotation]
+func GetClusterName(as annotationStore) string {
+	return as.GetAnnotations()[SoloClusterAnnotation]
 }
 
 // SetClusterName on the retrieved annotations
 // Set annotations which while slow is correct.
-func SetClusterName(ha annotationStore, clusterName string) {
-	anno := ha.GetAnnotations()
+func SetClusterName(as annotationStore, clusterName string) {
+	anno := as.GetAnnotations()
 	if anno == nil {
 		anno = map[string]string{}
 	}
 	anno[SoloClusterAnnotation] = clusterName
-	ha.SetAnnotations(anno)
+	as.SetAnnotations(anno)
 }

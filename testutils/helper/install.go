@@ -81,9 +81,8 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 		testConfig = configFunc(defaults)
 	}
 
-	goarch, exists := os.LookupEnv("GOARCH")
 	if testConfig.GlooctlExecName == "" {
-		if exists && (goarch == "amd64" || goarch == "arm64") {
+		if goarch, exists := os.LookupEnv("GOARCH"); exists && (goarch == "amd64" || goarch == "arm64") {
 			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
 		} else if runtime.GOARCH == "arm64" {
 			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch

@@ -81,13 +81,15 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 		testConfig = configFunc(defaults)
 	}
 
-	alreadySet := testConfig.GlooctlExecName != ""
-	if goarch, exists := os.LookupEnv("GOARCH"); !alreadySet && exists && (goarch == "amd64" || goarch == "arm64") {
-		testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
-	} else if runtime.GOARCH == "arm64" {
-		testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
-	} else {
-		testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-amd64"
+	goarch, exists := os.LookupEnv("GOARCH")
+	if testConfig.GlooctlExecName == "" {
+		if exists && (goarch == "amd64" || goarch == "arm64") {
+			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
+		} else if runtime.GOARCH == "arm64" {
+			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
+		} else {
+			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-amd64"
+		}
 	}
 
 	// Get chart version

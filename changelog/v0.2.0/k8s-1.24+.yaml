@@ -1,6 +1,6 @@
 changelog:
-  - type: FIX
-    issueLink: https://github.com/solo-io/solo-projects/issues/7071
+  - type: BREAKING_CHANGE
+    issueLink: https://github.com/solo-io/gloo/issues/7071
     resolvesIssue: false
     description: Clustername override
   - type: DEPENDENCY_BUMP
@@ -15,3 +15,7 @@ changelog:
     dependencyOwner: k8s.io
     dependencyRepo: apimachinery
     dependencyTag: kubernetes-1.25
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: golang
+    dependencyRepo: go
+    dependencyTag: 1.19

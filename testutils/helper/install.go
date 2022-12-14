@@ -56,12 +56,12 @@ type TestConfig struct {
 	LicenseKey string
 	// Determines whether the test runner pod gets deployed
 	DeployTestRunner bool
-	// Install a released version of gloo
+	// Install a released version of gloo. This is the value of the github tag that may have a leading 'v'
 	ReleasedVersion string
 	// If true, glooctl will be run with a -v flag
 	Verbose bool
 
-	// The version of the Helm chart
+	// The version of the Helm chart. Calculated from either the chart or the released version. It will not have a leading 'v'
 	version string
 }
 
@@ -93,7 +93,12 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 		}
 		testConfig.version = version
 	} else {
-		testConfig.version = testConfig.ReleasedVersion
+		// we use the version field as a chart version and tests assume it doesn't have a leading 'v'
+		if testConfig.ReleasedVersion[0] == 'v' {
+			testConfig.version = testConfig.ReleasedVersion[1:]
+		} else {
+			testConfig.version = testConfig.ReleasedVersion
+		}
 	}
 	// Default the install namespace to the chart version.
 	// Currently the test chart version built in CI contains the build id, so the namespace will be unique).

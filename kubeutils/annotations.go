@@ -1,9 +1,9 @@
 package kubeutils
 
-// SoloClusterAnnotation was originally implemented in solo-kitv2's ezkube package
+// SoloClusterAnnotation was originally implemented in skv2's ezkube package
 // It allows for easy mimicking of the old clustername field present in
 // k8s prior to 1.24. It is stored here to make future changes easier and not
-// require multi package switches as if any of the dependant packages are out of
+// require multi package switches as if any of the dependent packages are out of
 // sync on this field it can cause hard to diagnose issues.
 const SoloClusterAnnotation = "cluster.solo.io/cluster"
 

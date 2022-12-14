@@ -7,19 +7,19 @@ package kubeutils
 // sync on this field it can cause hard to diagnose issues.
 const SoloClusterAnnotation = "cluster.solo.io/cluster"
 
-type hasAnnotations interface {
+type annotationStore interface {
 	SetAnnotations(map[string]string)
 	GetAnnotations() map[string]string
 }
 
 // GetClusterName from within the annotations
-func GetClusterName(ha hasAnnotations) string {
+func GetClusterName(ha annotationStore) string {
 	return ha.GetAnnotations()[SoloClusterAnnotation]
 }
 
 // SetClusterName on the retrieved annotations
 // Set annotations which while slow is correct.
-func SetClusterName(ha hasAnnotations, clusterName string) {
+func SetClusterName(ha annotationStore, clusterName string) {
 	anno := ha.GetAnnotations()
 	if anno == nil {
 		anno = map[string]string{}

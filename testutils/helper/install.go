@@ -56,12 +56,12 @@ type TestConfig struct {
 	LicenseKey string
 	// Determines whether the test runner pod gets deployed
 	DeployTestRunner bool
-	// Install a released version of gloo
+	// Install a released version of gloo. This is the value of the github tag that may have a leading 'v'
 	ReleasedVersion string
 	// If true, glooctl will be run with a -v flag
 	Verbose bool
 
-	// The version of the Helm chart
+	// The version of the Helm chart. Calculated from either the chart or the released version. It will not have a leading 'v'
 	version string
 }
 

@@ -64,15 +64,15 @@ type TestConfig struct {
 	version string
 }
 
-// This helper is meant to provide a standard way of deploying Gloo/GlooE to a k8s cluster during tests.
-// It assumes that build and test assets are present in the `_output` and `_test` directories (these are configurable).
-// Specifically, it expects the glooctl executable in the BuildAssetDir and a helm chart in TestAssetDir.
-// It also assumes that a kubectl executable is on the PATH.
 type SoloTestHelper struct {
 	*TestConfig
 	TestRunner
 }
 
+// NewSoloTestHelper is meant to provide a standard way of deploying Gloo/GlooE to a k8s cluster during tests.
+// It assumes that build and test assets are present in the `_output` and `_test` directories (these are configurable).
+// Specifically, it expects the glooctl executable in the BuildAssetDir and a helm chart in TestAssetDir.
+// It also assumes that a kubectl executable is on the PATH.
 func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 
 	// Get and validate test config

@@ -1,0 +1,21 @@
+changelog:
+  - type: BREAKING_CHANGE
+    issueLink: https://github.com/solo-io/gloo/issues/7071
+    resolvesIssue: false
+    description: Use annotations to store/retrieve cluster names, to support kubernetes versions 1.24 and later where the `metadata.clusterName` field does not exist.
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: k8s.io
+    dependencyRepo: api
+    dependencyTag: kubernetes-1.25
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: k8s.io
+    dependencyRepo: client-go
+    dependencyTag: kubernetes-1.25
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: k8s.io
+    dependencyRepo: apimachinery
+    dependencyTag: kubernetes-1.25
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: golang
+    dependencyRepo: go
+    dependencyTag: 1.19

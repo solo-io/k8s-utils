@@ -43,8 +43,8 @@ func GetClusterResources(ctx context.Context, cfg *rest.Config, filterFuncs ...F
 		return nil, err
 	}
 
-	// list api resources that can be CRUD'ed
-	serverResources, err := disc.ServerResources()
+	// list api resources that can be CRUD'ed, throw away the group information
+	_, serverResources, err := disc.ServerGroupsAndResources()
 	if err != nil {
 		return nil, err
 	}

@@ -14,6 +14,7 @@ import (
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chart"
 	"helm.sh/helm/v3/pkg/release"
+	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -125,7 +126,13 @@ var _ = Describe("helm install client", func() {
 
 	It("can properly set cli env settings with namespace", func() {
 		settings := internal.NewCLISettings(helmKubeConfigPath, helmKubeContext, namespace)
-		Expect(settings.Namespace()).To(Equal(namespace))
+
+		// https://github.com/kubernetes/client-go/commit/48409ad603e6199e2957e371f0d55bbc4bc521bc
+		// As shown in this commit our client-go no longer allows for invalid configs
+		// when accessing namespace. We can just pull the settings to validate that its in there tho.
+		cfg, _ := settings.RESTClientGetter().(*genericclioptions.ConfigFlags)
+		Expect(*cfg.Namespace).To(Equal(namespace))
+
 	})
 
 	It("should return true when release exists", func() {

@@ -80,7 +80,8 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	if configFunc != nil {
 		testConfig = configFunc(defaults)
 	}
-
+	// Depending on the testing tool used, GOARCH may always be set if not set already by detecting the local arch
+	// (`go test`), `ginkgo` and other testing tools may not do this requiring keeping the runtime.GOARCH check
 	if testConfig.GlooctlExecName == "" {
 		if goarch, exists := os.LookupEnv("GOARCH"); exists && (goarch == "amd64" || goarch == "arm64") {
 			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch

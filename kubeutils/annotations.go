@@ -8,7 +8,6 @@ package kubeutils
 const SoloClusterAnnotation = "cluster.solo.io/cluster"
 
 type annotationStore interface {
-	SetAnnotations(map[string]string)
 	GetAnnotations() map[string]string
 }
 
@@ -17,13 +16,24 @@ func GetClusterName(as annotationStore) string {
 	return as.GetAnnotations()[SoloClusterAnnotation]
 }
 
-// SetClusterName on the retrieved annotations
-// Set annotations which while slow is correct.
-func SetClusterName(as annotationStore, clusterName string) {
+// AddClusterName to the retrieved annotations
+func AddClusterName(as annotationStore, clusterName string) map[string]string {
 	anno := as.GetAnnotations()
 	if anno == nil {
 		anno = map[string]string{}
 	}
 	anno[SoloClusterAnnotation] = clusterName
-	as.SetAnnotations(anno)
+	return anno
+}
+
+type settableAnnotationStore interface {
+	SetAnnotations(map[string]string)
+	GetAnnotations() map[string]string
+}
+
+// SetClusterName on the retrieved annotations
+// Set annotations which while slow is correct.
+func SetClusterName(sas settableAnnotationStore, clusterName string) {
+	anno := AddClusterName(sas, clusterName)
+	sas.SetAnnotations(anno)
 }

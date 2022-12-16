@@ -1,0 +1,5 @@
+changelog:
+  - type: NEW_FEATURE
+    issueLink: https://github.com/solo-io/gloo/issues/7071
+    resolvesIssue: false
+    description: Add a new way to manipulate annotations to have clustername set in solo specific ways

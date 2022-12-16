@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
+	"github.com/solo-io/k8s-utils/kubeutils"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	. "github.com/onsi/ginkgo"
@@ -93,7 +94,7 @@ var _ = Describe("Unstructured", func() {
 			res2.SetCreationTimestamp(v1.Time{Time: time.Now()})
 			res2.SetDeletionTimestamp(&v1.Time{Time: time.Now()})
 			res2.SetDeletionGracePeriodSeconds(proto.Int64(64))
-			res2.SetClusterName("abcd")
+			kubeutils.SetClusterName(res2, "abcd")
 			res2.Object["status"] = "asdf"
 			Expect(Match(context.Background(), res1, res2)).To(BeTrue())
 			res2.Object["anyotherfield"] = "asdf"

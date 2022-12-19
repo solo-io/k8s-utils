@@ -33,6 +33,26 @@ var defaults = TestConfig{
 	DeployTestRunner:      true,
 }
 
+// supportedArchs is represents the list of architectures we build glooctl for
+var supportedArchs = map[string]struct{}{
+	"arm64": {},
+	"amd64": {},
+}
+
+// returns true if supported, based on `supportedArchs`
+func isSupportedArch() (string, bool) {
+	if goarch, ok := os.LookupEnv("GOARCH"); ok {
+		// if the environment's goarch is supported
+		_, ok := supportedArchs[goarch]
+		return goarch, ok
+	}
+
+	// if the runtime's goarch is supported
+	runtimeArch := runtime.GOARCH
+	_, ok := supportedArchs[runtimeArch]
+	return runtimeArch, ok
+}
+
 // Function to provide/override test configuration. Default values will be passed in.
 type TestConfigFunc func(defaults TestConfig) TestConfig
 
@@ -83,10 +103,8 @@ func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 	// Depending on the testing tool used, GOARCH may always be set if not set already by detecting the local arch
 	// (`go test`), `ginkgo` and other testing tools may not do this requiring keeping the runtime.GOARCH check
 	if testConfig.GlooctlExecName == "" {
-		if goarch, exists := os.LookupEnv("GOARCH"); exists && (goarch == "amd64" || goarch == "arm64") {
-			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
-		} else if runtime.GOARCH == "arm64" {
-			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + goarch
+		if arch, ok := isSupportedArch(); ok {
+			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + arch
 		} else {
 			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-amd64"
 		}

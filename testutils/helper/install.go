@@ -30,8 +30,27 @@ var defaults = TestConfig{
 	TestAssetDir:          "_test",
 	BuildAssetDir:         "_output",
 	HelmRepoIndexFileName: "index.yaml",
-	GlooctlExecName:       "glooctl-" + runtime.GOOS + "-amd64",
 	DeployTestRunner:      true,
+}
+
+// supportedArchs is represents the list of architectures we build glooctl for
+var supportedArchs = map[string]struct{}{
+	"arm64": {},
+	"amd64": {},
+}
+
+// returns true if supported, based on `supportedArchs`
+func isSupportedArch() (string, bool) {
+	if goarch, ok := os.LookupEnv("GOARCH"); ok {
+		// if the environment's goarch is supported
+		_, ok := supportedArchs[goarch]
+		return goarch, ok
+	}
+
+	// if the runtime's goarch is supported
+	runtimeArch := runtime.GOARCH
+	_, ok := supportedArchs[runtimeArch]
+	return runtimeArch, ok
 }
 
 // Function to provide/override test configuration. Default values will be passed in.
@@ -65,21 +84,30 @@ type TestConfig struct {
 	version string
 }
 
-// This helper is meant to provide a standard way of deploying Gloo/GlooE to a k8s cluster during tests.
-// It assumes that build and test assets are present in the `_output` and `_test` directories (these are configurable).
-// Specifically, it expects the glooctl executable in the BuildAssetDir and a helm chart in TestAssetDir.
-// It also assumes that a kubectl executable is on the PATH.
 type SoloTestHelper struct {
 	*TestConfig
 	TestRunner
 }
 
+// NewSoloTestHelper is meant to provide a standard way of deploying Gloo/GlooE to a k8s cluster during tests.
+// It assumes that build and test assets are present in the `_output` and `_test` directories (these are configurable).
+// Specifically, it expects the glooctl executable in the BuildAssetDir and a helm chart in TestAssetDir.
+// It also assumes that a kubectl executable is on the PATH.
 func NewSoloTestHelper(configFunc TestConfigFunc) (*SoloTestHelper, error) {
 
 	// Get and validate test config
 	testConfig := defaults
 	if configFunc != nil {
 		testConfig = configFunc(defaults)
+	}
+	// Depending on the testing tool used, GOARCH may always be set if not set already by detecting the local arch
+	// (`go test`), `ginkgo` and other testing tools may not do this requiring keeping the runtime.GOARCH check
+	if testConfig.GlooctlExecName == "" {
+		if arch, ok := isSupportedArch(); ok {
+			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-" + arch
+		} else {
+			testConfig.GlooctlExecName = "glooctl-" + runtime.GOOS + "-amd64"
+		}
 	}
 
 	// Get chart version

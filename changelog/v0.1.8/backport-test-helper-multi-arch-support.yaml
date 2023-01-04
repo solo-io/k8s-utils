@@ -1,4 +1,4 @@
 changelog:
   - type: NEW_FEATURE
     issueLink: https://github.com/solo-io/k8s-utils/issues/25
-    description: Added logic for multi arch support when creating `SoloTestHelper`s
+    description: backport logic for multi arch support when creating `SoloTestHelper`s

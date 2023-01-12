@@ -1,0 +1,4 @@
+changelog:
+  - type: NEW_FEATURE
+    issueLink: https://github.com/solo-io/solo-projects/issues/4362
+    description: Added LogResponses as an option to curl ops - in order to log out response you can set this value to true. Reduces log polution

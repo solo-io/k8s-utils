@@ -91,8 +91,8 @@ var defaultRetryOptions = []retry.Option{
 }
 
 /*
-   NewKubeInstaller does not initialize the cache.
-   Should be one once globally
+NewKubeInstaller does not initialize the cache.
+Should be one once globally
 */
 func NewKubeInstaller(cfg *rest.Config, cache *Cache, opts *KubeInstallerOptions) (*KubeInstaller, error) {
 

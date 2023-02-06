@@ -16,3 +16,11 @@
 # ignore intermediate files that gomock sometimes generates
 **/gomock_reflect*
 id_rsa
+
+
+test-report.json
+junit*.xml
+*cov
+.bin
+
+*.test

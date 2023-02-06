@@ -14,7 +14,7 @@ import (
 
 	"regexp"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/k8s-utils/installutils/helmchart"
 	"github.com/solo-io/k8s-utils/installutils/kuberesource"

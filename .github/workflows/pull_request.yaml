@@ -37,7 +37,7 @@ jobs:
         version: ${{ env.KUBE_VERSION }}
     - uses: engineerd/setup-kind@v0.5.0
       with:
-        image: ${{ env.KUBE_VERSION }}
+        image: "kindest/node:${{ env.KUBE_VERSION }}"
     - name: Run tests
       env:
         TEST_PKG: ./... # Run all tests

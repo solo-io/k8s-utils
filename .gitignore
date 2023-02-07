@@ -17,10 +17,10 @@
 **/gomock_reflect*
 id_rsa
 
+_output
 
 test-report.json
 junit*.xml
 *cov
-.bin
 
 *.test

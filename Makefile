@@ -21,8 +21,8 @@ help: ## Output the self-documenting make targets
 # Repo setup
 #----------------------------------------------------------------------------------
 ROOT_DIR := $(shell pwd)
-DEPSGOBIN := $(ROOT_DIR)/.bin
 OUTPUT_DIR := $(ROOT_DIR)/_output
+DEPSGOBIN := $(OUTPUT_DIR)/.bin
 
 export PATH:=$(DEPSGOBIN):$(PATH)
 export GOBIN:=$(DEPSGOBIN)
@@ -33,7 +33,7 @@ export GOBIN:=$(DEPSGOBIN)
 
 .PHONY: clean
 clean: ## Clean any local assets
-	rm -rf _output
+	rm -rf $(OUTPUT_DIR)
 	find * -type f -name '*.test' -exec rm {} \;
 
 #----------------------------------------------------------------------------------
@@ -42,9 +42,9 @@ clean: ## Clean any local assets
 
 GINKGO_VERSION ?= 2.5.0 # match our go.mod
 GINKGO_ENV ?= GOLANG_PROTOBUF_REGISTRATION_CONFLICT=ignore ACK_GINKGO_DEPRECATIONS=$(GINKGO_VERSION)
-GINKGO_FLAGS ?= -v -tags=purego -compilers=4 -fail-fast -randomize-suites -randomize-all -skip-package=./installutils/kubeinstall,./debugutils/test
+GINKGO_FLAGS ?= -v -tags=purego -compilers=4 -fail-fast -race -randomize-suites -randomize-all -skip-package=./installutils/kubeinstall,./debugutils/test
 GINKGO_REPORT_FLAGS ?= --json-report=test-report.json --junit-report=junit.xml -output-dir=$(OUTPUT_DIR)
-GINKGO_COVERAGE_FLAGS ?= --cover --covermode=count --coverprofile=coverage.cov
+GINKGO_COVERAGE_FLAGS ?= --cover --covermode=atomic --coverprofile=coverage.cov
 TEST_PKG ?= ./... # Default to running all tests
 
 # This is a way for a user executing `make test` to be able to provide flags which we do not include by default
@@ -58,10 +58,10 @@ install-test-tools:
 .PHONY: test
 test: install-test-tools ## Run tests in the {TEST_PKG}
 	$(GINKGO_ENV) ginkgo \
-		$(GINKGO_FLAGS) $(GINKGO_REPORT_FLAGS) $(GINKGO_USER_FLAGS) \
-		$(TEST_PKG)
+	$(GINKGO_FLAGS) $(GINKGO_REPORT_FLAGS) $(GINKGO_USER_FLAGS) \
+	$(TEST_PKG)
 
 .PHONY: test-with-coverage
 test-with-coverage: GINKGO_FLAGS += $(GINKGO_COVERAGE_FLAGS) ## Run tests in the {TEST_PKG} with coverage
 test-with-coverage: test
-	go tool cover -html coverage.cov
+	go tool cover -html $(OUTPUT_DIR)/coverage.cov

@@ -9,7 +9,7 @@ import (
 	"github.com/solo-io/go-utils/testutils"
 	"github.com/solo-io/k8s-utils/configutils"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	kube2 "github.com/solo-io/k8s-utils/testutils/kube"
 	kubeerr "k8s.io/apimachinery/pkg/api/errors"

@@ -10,7 +10,7 @@ import (
 	"github.com/solo-io/go-utils/testutils/runners/consul"
 
 	"github.com/avast/retry-go"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/go-utils/testutils"
 	"github.com/solo-io/k8s-utils/kubeutils"

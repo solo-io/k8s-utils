@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/mock/gomock"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/k8s-utils/installutils/helminstall/internal"
 	mock_internal "github.com/solo-io/k8s-utils/installutils/helminstall/internal/mocks"

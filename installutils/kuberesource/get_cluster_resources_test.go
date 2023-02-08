@@ -2,7 +2,6 @@ package kuberesource
 
 import (
 	"context"
-
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/go-utils/testutils"
@@ -57,7 +56,7 @@ var _ = Describe("GetClusterResources", func() {
 		Expect(err).NotTo(HaveOccurred())
 		expected := UnstructuredResources{expected1, expected2, expected3}
 
-		Expect(cmInOurNs).To(HaveLen(3))
+		Expect(cmInOurNs).To(HaveLen(3+1), "Expect our 3 ConfigMaps plus the default kube-root-ca.crt")
 		for i := range expected {
 			actual := cmInOurNs[i]
 			delete(actual.Object, "metadata")

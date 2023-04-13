@@ -25,6 +25,7 @@ type CurlOpts struct {
 	ReturnHeaders     bool
 	ConnectionTimeout int
 	Verbose           bool
+	LogResponses      bool
 	// WithoutStats sets the -s flag to prevent download stats from printing
 	WithoutStats bool
 	// Optional SNI name to resolve domain to when sending request
@@ -112,11 +113,11 @@ func (t *testContainer) CurlEventuallyShouldRespond(opts CurlOpts, substr string
 		default:
 			break
 		case <-tick:
-			if opts.Verbose {
+			if opts.LogResponses {
 				log.GreyPrintf("running: %v\nwant %v\nhave: %s", opts, substr, res)
 			}
 		}
-		if strings.Contains(res, substr) {
+		if strings.Contains(res, substr) && opts.LogResponses {
 			log.GreyPrintf("success: %v", res)
 		}
 		return res

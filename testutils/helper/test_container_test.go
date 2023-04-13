@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/go-utils/log"
 	"github.com/solo-io/go-utils/testutils"
@@ -41,7 +41,6 @@ var _ = Describe("test container tests", func() {
 		Expect(err).NotTo(HaveOccurred())
 	})
 	Context("test runner", func() {
-
 		var (
 			testRunner *testRunner
 		)
@@ -52,12 +51,10 @@ var _ = Describe("test container tests", func() {
 			err = testRunner.Deploy(time.Minute * 2)
 			Expect(err).NotTo(HaveOccurred())
 		})
-
 		AfterEach(func() {
 			err := testRunner.Terminate()
 			Expect(err).NotTo(HaveOccurred())
 		})
-
 		It("can install and uninstall the testrunner", func() {
 			// responseString := fmt.Sprintf(`"%s":"%s.%s.svc.cluster.local:%v"`,
 			// 	linkerd.HeaderKey, helper.HttpEchoName, testHelper.InstallNamespace, helper.HttpEchoPort)
@@ -72,11 +69,9 @@ var _ = Describe("test container tests", func() {
 				ConnectionTimeout: 10,
 			}, SimpleHttpResponse, 1, 120*time.Second)
 		})
-
 	})
 
 	Context("http ehco", func() {
-
 		var (
 			httpEcho *echoPod
 		)
@@ -87,7 +82,6 @@ var _ = Describe("test container tests", func() {
 			err = httpEcho.deploy(time.Minute)
 			Expect(err).NotTo(HaveOccurred())
 		})
-
 		AfterEach(func() {
 			err := httpEcho.Terminate()
 			Expect(err).NotTo(HaveOccurred())
@@ -104,12 +98,12 @@ var _ = Describe("test container tests", func() {
 				Service:           HttpEchoName,
 				Port:              HttpEchoPort,
 				ConnectionTimeout: 10,
+				Verbose:           true,
 			}, responseString, 1, 120*time.Second)
 		})
 	})
 
 	Context("tcp ehco", func() {
-
 		var (
 			tcpEcho *echoPod
 		)
@@ -120,7 +114,6 @@ var _ = Describe("test container tests", func() {
 			err = tcpEcho.deploy(time.Minute)
 			Expect(err).NotTo(HaveOccurred())
 		})
-
 		AfterEach(func() {
 			err := tcpEcho.Terminate()
 			Expect(err).NotTo(HaveOccurred())

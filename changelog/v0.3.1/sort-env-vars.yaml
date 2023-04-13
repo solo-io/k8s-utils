@@ -1,0 +1,5 @@
+changelog:
+  - type: FIX
+    issueLink: https://github.com/solo-io/gloo/issues/7992
+    resolvesIssue: false
+    description: ExpectDeploymentAppsV1 currently enforces identical ordering of env vars when comparing deployments which is unnecessary.

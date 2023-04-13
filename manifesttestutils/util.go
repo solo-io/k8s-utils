@@ -3,6 +3,7 @@ package manifesttestutils
 import (
 	"fmt"
 	"io/ioutil"
+	"sort"
 
 	extv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 
@@ -87,6 +88,11 @@ func (t *testManifest) ExpectDeploymentAppsV1(deployment *appsv1.Deployment) {
 	obj := t.mustFindObject(deployment.Kind, deployment.Namespace, deployment.Name)
 	Expect(obj).To(BeAssignableToTypeOf(&appsv1.Deployment{}))
 	actual := obj.(*appsv1.Deployment)
+	sortEnvVars := func(vars []corev1.EnvVar) {
+		sort.Slice(vars, func(i, j int) bool { return vars[i].Name < vars[j].Name })
+	}
+	sortEnvVars(actual.Spec.Template.Spec.Containers[0].Env)
+	sortEnvVars(deployment.Spec.Template.Spec.Containers[0].Env)
 	Expect(actual).To(BeEquivalentTo(deployment))
 }
 

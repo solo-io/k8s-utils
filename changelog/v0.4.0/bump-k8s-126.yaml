@@ -27,3 +27,7 @@ changelog:
     dependencyOwner: k8s.io
     dependencyRepo: client-go
     dependencyTag: v0.26.4
+  - type: DEPENDENCY_BUMP
+    dependencyOwner: sigs.k8s.io
+    dependencyRepo: controller-runtime
+    dependencyTag: v0.14.6

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strings"
 	"sync"
 
@@ -45,7 +46,10 @@ func DefaultResourceCollector() (*resourceCollector, error) {
 	if err != nil {
 		return nil, eris.Wrapf(err, "unable to initialize %s", resourceCollectorStr)
 	}
-	restMapper, err := apiutil.NewDiscoveryRESTMapper(cfg)
+
+	// TODO - figure out what really needs to be passed:
+	httpClient := http.Client{}
+	restMapper, err := apiutil.NewDiscoveryRESTMapper(cfg, &httpClient)
 	if err != nil {
 		return nil, eris.Wrapf(err, "unable to initialize %s", resourceCollectorStr)
 	}

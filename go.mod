@@ -16,7 +16,7 @@ require (
 	github.com/onsi/gomega v1.27.7
 	github.com/pkg/errors v0.9.1
 	github.com/rotisserie/eris v0.1.1
-	github.com/solo-io/go-utils v0.24.2
+	github.com/solo-io/go-utils v0.24.6-0.20230717191956-6ce770d735b2
 	github.com/spf13/afero v1.6.0
 	go.uber.org/zap v1.24.0
 	golang.org/x/sync v0.2.0
@@ -115,7 +115,7 @@ require (
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.3-0.20211202183452-c5a74bcca799 // indirect
 	github.com/opencontainers/runc v1.1.1 // indirect

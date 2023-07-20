@@ -16,7 +16,7 @@ require (
 	github.com/onsi/gomega v1.27.7
 	github.com/pkg/errors v0.9.1
 	github.com/rotisserie/eris v0.1.1
-	github.com/solo-io/go-utils v0.24.2
+	github.com/solo-io/go-utils v0.24.6-0.20230720201134-1778677450fa
 	github.com/spf13/afero v1.6.0
 	go.uber.org/zap v1.24.0
 	golang.org/x/sync v0.2.0

@@ -1,6 +1,6 @@
 module github.com/solo-io/k8s-utils
 
-go 1.19
+go 1.20
 
 require (
 	github.com/avast/retry-go v2.2.0+incompatible

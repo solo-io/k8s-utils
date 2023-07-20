@@ -1,12 +1,8 @@
 changelog:
   - type: BREAKING_CHANGE
-    issueLink: https://github.com/solo-io/gloo/issues/8164
+    issueLink: https://github.com/solo-io/gloo/issues/8214
     resolvesIssue: false
     description: Upgrade Kubernetes dependencies to 1.27.3
-  - type: DEPENDENCY_BUMP
-    dependencyOwner: solo-io
-    dependencyRepo: go-utils
-    dependencyTag: v0.24.2
   - type: DEPENDENCY_BUMP
     dependencyOwner: k8s.io
     dependencyRepo: api
@@ -30,4 +26,4 @@ changelog:
   - type: DEPENDENCY_BUMP
     dependencyOwner: sigs.k8s.io
     dependencyRepo: controller-runtime
-    dependencyTag: v0.14.6
+    dependencyTag: v0.15.0

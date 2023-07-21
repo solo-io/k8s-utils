@@ -59,12 +59,21 @@ type testManifest struct {
 	resources kuberesource.UnstructuredResources
 }
 
+// NewTestManifest creates a TestManifest by reading from the manifest file located at `relativePathToManifest`.
 func NewTestManifest(relativePathToManifest string) TestManifest {
 	return &testManifest{
-		resources: mustGetResources(relativePathToManifest),
+		resources: mustGetResourcesFromFile(relativePathToManifest),
 	}
 }
 
+// NewTestManifestFromYaml creates a TestManifest from the given manifest yaml.
+func NewTestManifestFromYaml(manifest string) TestManifest {
+	return &testManifest{
+		resources: mustGetResourcesFromYaml(manifest),
+	}
+}
+
+// NewTestManifestWithResources creates a TestManifest with the given resources.
 func NewTestManifestWithResources(resources kuberesource.UnstructuredResources) TestManifest {
 	return &testManifest{
 		resources: resources,
@@ -308,8 +317,12 @@ var (
 	yamlSeparator = regexp.MustCompile("\n---")
 )
 
-func mustGetResources(relativePathToManifest string) kuberesource.UnstructuredResources {
+func mustGetResourcesFromFile(relativePathToManifest string) kuberesource.UnstructuredResources {
 	manifest := mustReadManifest(relativePathToManifest)
+	return mustGetResourcesFromYaml(manifest)
+}
+
+func mustGetResourcesFromYaml(manifest string) kuberesource.UnstructuredResources {
 	snippets := yamlSeparator.Split(manifest, -1)
 
 	var resources kuberesource.UnstructuredResources

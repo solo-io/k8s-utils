@@ -277,4 +277,55 @@ var _ = Describe("Helm Test", func() {
 			testManifest.ExpectPermissions(permissions)
 		})
 	})
+
+	Context("manifest from yaml", func() {
+		It("has the right number of resources", func() {
+			manifestYaml := `
+apiVersion: v1
+kind: MyType
+metadata:
+  name: my-name
+  namespace: my-namespace
+spec:
+  blah: true
+---
+apiVersion: v1
+kind: AnotherType
+metadata:
+  name: another-name
+  namespace: another-namespace
+data:
+  some: thing
+`
+			manifestFromYaml := NewTestManifestFromYaml(manifestYaml)
+			Expect(manifestFromYaml.NumResources()).To(Equal(2))
+			manifestFromYaml.ExpectUnstructured("MyType", "my-namespace", "my-name").NotTo(BeNil())
+			manifestFromYaml.ExpectUnstructured("AnotherType", "another-namespace", "another-name").NotTo(BeNil())
+		})
+
+		// This is a test showing that yaml without proper splitting (e.g. `---` without a newline afterwards) results in
+		// the manifest not containing all the expected resources. This helps catch errors with missing newlines in manifests.
+		It("does not split resources properly when newline is missing", func() {
+			manifestYaml := `
+apiVersion: v1
+kind: MyType
+metadata:
+  name: my-name
+  namespace: my-namespace
+spec:
+  blah: true
+---apiVersion: v1
+kind: AnotherType
+metadata:
+  name: another-name
+  namespace: another-namespace
+data:
+  some: thing
+`
+			manifestFromYaml := NewTestManifestFromYaml(manifestYaml)
+			Expect(manifestFromYaml.NumResources()).To(Equal(1))
+			manifestFromYaml.ExpectUnstructured("MyType", "my-namespace", "my-name").To(BeNil())
+			manifestFromYaml.ExpectUnstructured("AnotherType", "another-namespace", "another-name").NotTo(BeNil())
+		})
+	})
 })

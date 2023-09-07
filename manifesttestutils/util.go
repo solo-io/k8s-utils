@@ -12,8 +12,6 @@ import (
 	"k8s.io/api/extensions/v1beta1"
 	rbacv1 "k8s.io/api/rbac/v1"
 
-	"regexp"
-
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/solo-io/k8s-utils/installutils/helmchart"
@@ -313,17 +311,13 @@ func mustReadManifest(relativePathToManifest string) string {
 	return string(bytes)
 }
 
-var (
-	yamlSeparator = regexp.MustCompile("\n---\n")
-)
-
 func mustGetResourcesFromFile(relativePathToManifest string) kuberesource.UnstructuredResources {
 	manifest := mustReadManifest(relativePathToManifest)
 	return mustGetResourcesFromYaml(manifest)
 }
 
 func mustGetResourcesFromYaml(manifest string) kuberesource.UnstructuredResources {
-	snippets := yamlSeparator.Split(manifest, -1)
+	snippets := helmchart.YamlSeparator.Split(manifest, -1)
 
 	var resources kuberesource.UnstructuredResources
 	for _, objectYaml := range snippets {

@@ -314,7 +314,7 @@ func mustReadManifest(relativePathToManifest string) string {
 }
 
 var (
-	yamlSeparator = regexp.MustCompile("\n---")
+	yamlSeparator = regexp.MustCompile("\n---\n")
 )
 
 func mustGetResourcesFromFile(relativePathToManifest string) kuberesource.UnstructuredResources {

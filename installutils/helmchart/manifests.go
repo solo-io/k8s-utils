@@ -73,10 +73,10 @@ func (m Manifests) CombinedString() string {
 	return buf.String()
 }
 
-var yamlSeparator = regexp.MustCompile("\n---")
+var YamlSeparator = regexp.MustCompile("\n---\n")
 
 func (m Manifests) ResourceList() (kuberesource.UnstructuredResources, error) {
-	snippets := yamlSeparator.Split(m.CombinedString(), -1)
+	snippets := YamlSeparator.Split(m.CombinedString(), -1)
 
 	var resources kuberesource.UnstructuredResources
 	for _, objectYaml := range snippets {

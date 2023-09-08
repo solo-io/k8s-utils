@@ -1,0 +1,5 @@
+changelog:
+  - type: FIX
+    issueLink: https://github.com/solo-io/gloo/issues/8648
+    resolvesIssue: false
+    description: Add newline to end of yaml separator to better detect properly-formatted helm manifests.

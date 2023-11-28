@@ -422,8 +422,8 @@ github.com/shopspring/decimal v1.3.1/go.mod h1:DKyhrW/HYNuLGql+MJL6WCR6knT2jwCFR
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
-github.com/solo-io/go-utils v0.24.8-0.20231127194310-55f8760f995a h1:SwGEwfFvfA1HaDQARUfHbVHCw5k/EfHaFwHQQdCwda0=
-github.com/solo-io/go-utils v0.24.8-0.20231127194310-55f8760f995a/go.mod h1:e4FCtXnIslYD/6qLgBgJ91E+6wtK6+tn4uRSr950hwU=
+github.com/solo-io/go-utils v0.24.8-0.20231128194722-8ca1ac5fcb92 h1:jYPhl9JQ31V690FvmKZ0s/z8P+Xa5IovuK6SpTtE88A=
+github.com/solo-io/go-utils v0.24.8-0.20231128194722-8ca1ac5fcb92/go.mod h1:RDMe8hfcfv9FLN7KCqW9VhqT5f3vAED3eQKFC5TKQ+U=
 github.com/spf13/afero v1.6.0 h1:xoax2sJ2DT8S8xA2paPFjDCScCNeWsg75VG0DLRreiY=
 github.com/spf13/afero v1.6.0/go.mod h1:Ai8FlHk4v/PARR026UzYexafAt9roJ7LcLMAmO6Z93I=
 github.com/spf13/cast v1.3.1/go.mod h1:Qx5cxh0v+4UWYiBimWS+eyWzqEqokIECu5etghLkUJE=

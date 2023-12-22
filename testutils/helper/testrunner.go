@@ -88,7 +88,7 @@ func (t *testRunner) DeployTLS(timeout time.Duration, crt, key []byte) error {
 	if err := t.TerminateAndDeleteService(); err != nil {
 		return errors.Wrap(err, "terminating pod and deleting service")
 	}
-	if err := t.Deploy(timeout); err != nil {
+	if err := t.testContainer.Deploy(timeout); err != nil {
 		return errors.Wrap(err, "deploying pod")
 	}
 

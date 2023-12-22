@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 
 	"github.com/solo-io/go-utils/testutils"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -176,7 +175,7 @@ func executeNoFail(ctx context.Context, logger io.Writer, kubeContext string, ar
 	case <-ctx.Done():
 		return "", nil
 	case reader := <-readerChan:
-		data, err := ioutil.ReadAll(reader)
+		data, err := io.ReadAll(reader)
 		if err != nil {
 			return "", err
 		}

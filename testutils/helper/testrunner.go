@@ -13,7 +13,6 @@ const (
 	defaultTestRunnerImage = "quay.io/solo-io/testrunner:v1.7.0-beta17"
 	TestrunnerName         = "testrunner"
 	TestRunnerPort         = 1234
-	TestRunnerHttpsPort    = 1235
 
 	// This response is given by the testrunner when the SimpleServer is started
 	SimpleHttpResponse = `<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"><html>
@@ -48,7 +47,7 @@ const (
 </html>`
 )
 
-func NewTestRunner(namespace string) (*testRunner, error) {
+func NewTestRunner(namespace string) (TestRunner, error) {
 	testContainer, err := newTestContainer(namespace, defaultTestRunnerImage, TestrunnerName, TestRunnerPort)
 	if err != nil {
 		return nil, err
@@ -83,50 +82,54 @@ func (t *testRunner) Deploy(timeout time.Duration) error {
 	return nil
 }
 
+// DeployTLS deletes the running server pod and its service, then redeploys using a server
+// which serves HTTPS with the cert and key provided.
 func (t *testRunner) DeployTLS(timeout time.Duration, crt, key []byte) error {
 	if err := t.TerminateAndDeleteService(); err != nil {
 		return errors.Wrap(err, "terminating pod and deleting service")
 	}
-	if err := t.deploy(timeout); err != nil {
+	if err := t.Deploy(timeout); err != nil {
 		return errors.Wrap(err, "deploying pod")
 	}
 
+	certFname := "/tmp/testrunner_tls/cert.pem"
+	keyFname := "/tmp/testrunner_tls/key.pem"
+	scriptFname := "/tmp/testrunner_tls/server.py"
 	os.MkdirAll("/tmp/testrunner_tls", os.ModePerm)
 	defer os.RemoveAll("/tmp/testrunner_tls")
 
-	if err := os.WriteFile("/tmp/testrunner_tls/cert.pem", crt, os.ModePerm); err != nil {
+	if err := os.WriteFile(certFname, crt, os.ModePerm); err != nil {
 		return errors.Wrap(err, "writing cert")
 	}
-	if err := os.WriteFile("/tmp/testrunner_tls/key.pem", key, os.ModePerm); err != nil {
+	if err := os.WriteFile(keyFname, key, os.ModePerm); err != nil {
 		return errors.Wrap(err, "writing key")
 	}
-	if err := os.WriteFile("/tmp/testrunner_tls/server.py", []byte(`
+	if err := os.WriteFile(scriptFname, []byte(fmt.Sprintf(`
 import BaseHTTPServer, SimpleHTTPServer
 import ssl
 
-httpd = BaseHTTPServer.HTTPServer(('0.0.0.0', 1234), SimpleHTTPServer.SimpleHTTPRequestHandler)
-httpd.socket = ssl.wrap_socket (httpd.socket, keyfile="/tmp/key.pem", certfile='/tmp/cert.pem', server_side=True)
+httpd = BaseHTTPServer.HTTPServer(('0.0.0.0', %d), SimpleHTTPServer.SimpleHTTPRequestHandler)
+httpd.socket = ssl.wrap_socket (httpd.socket, keyfile='/tmp/key.pem', certfile='/tmp/cert.pem', server_side=True)
 httpd.serve_forever()
-	`), os.ModePerm); err != nil {
+`, TestRunnerPort)), os.ModePerm); err != nil {
 		return errors.Wrap(err, "writing server")
 	}
 	if err := t.Cp(map[string]string{
-		"/tmp/testrunner_tls/cert.pem":  "/tmp/cert.pem",
-		"/tmp/testrunner_tls/key.pem":   "/tmp/key.pem",
-		"/tmp/testrunner_tls/server.py": "/tmp/server.py",
+		certFname:   "/tmp/cert.pem",
+		keyFname:    "/tmp/key.pem",
+		scriptFname: "/tmp/server.py",
 	}); err != nil {
 		return errors.Wrap(err, "kubectl cp")
 	}
 
 	go func() {
 		start := time.Now()
-		log.Printf("~~~STARTING SERVER~~~")
 		log.Debugf("starting https server listening on port %v", TestRunnerPort)
 		// This command starts an https SimpleHttpServer and blocks until the server terminates
 		if _, err := t.Exec("python", "/tmp/server.py"); err != nil {
 			// if an error happened after 5 seconds, it's probably not an error.. just the pod terminating.
 			if time.Now().Sub(start).Seconds() < 5.0 {
-				log.Warnf("failed to start HTTP Server in Test Runner: %v", err)
+				log.Warnf("failed to start HTTPS Server in Test Runner: %v", err)
 			}
 		}
 	}()

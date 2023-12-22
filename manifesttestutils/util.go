@@ -2,7 +2,7 @@ package manifesttestutils
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	extv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 
@@ -306,7 +306,7 @@ func (t *testManifest) mustFindObject(kind, namespace, name string) runtime.Obje
 }
 
 func mustReadManifest(relativePathToManifest string) string {
-	bytes, err := ioutil.ReadFile(relativePathToManifest)
+	bytes, err := os.ReadFile(relativePathToManifest)
 	Expect(err).NotTo(HaveOccurred())
 	return string(bytes)
 }

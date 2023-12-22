@@ -2,7 +2,7 @@ package internal_test
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo/v2"
@@ -109,7 +109,7 @@ var _ = Describe("helm install client", func() {
 	It("should download Helm chart", func() {
 		chartUri := "chartUri.tgz"
 		chartFileContents := "test chart file"
-		chartFile := ioutil.NopCloser(bytes.NewBufferString(chartFileContents))
+		chartFile := io.NopCloser(bytes.NewBufferString(chartFileContents))
 		expectedChart := &chart.Chart{}
 		mockResourceFetcher.
 			EXPECT().

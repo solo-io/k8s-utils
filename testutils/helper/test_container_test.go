@@ -42,7 +42,7 @@ var _ = Describe("test container tests", func() {
 	})
 	Context("test runner", func() {
 		var (
-			testRunner *testRunner
+			testRunner TestRunner
 		)
 		BeforeEach(func() {
 			var err error
@@ -71,15 +71,15 @@ var _ = Describe("test container tests", func() {
 		})
 	})
 
-	Context("http ehco", func() {
+	Context("http echo", func() {
 		var (
-			httpEcho *echoPod
+			httpEcho TestContainer
 		)
 		BeforeEach(func() {
 			var err error
 			httpEcho, err = NewEchoHttp(namespace)
 			Expect(err).NotTo(HaveOccurred())
-			err = httpEcho.deploy(time.Minute)
+			err = httpEcho.(*testContainer).deploy(time.Minute)
 			Expect(err).NotTo(HaveOccurred())
 		})
 		AfterEach(func() {
@@ -105,13 +105,13 @@ var _ = Describe("test container tests", func() {
 
 	Context("tcp ehco", func() {
 		var (
-			tcpEcho *echoPod
+			tcpEcho TestContainer
 		)
 		BeforeEach(func() {
 			var err error
 			tcpEcho, err = NewEchoTcp(namespace)
 			Expect(err).NotTo(HaveOccurred())
-			err = tcpEcho.deploy(time.Minute)
+			err = tcpEcho.(*testContainer).deploy(time.Minute)
 			Expect(err).NotTo(HaveOccurred())
 		})
 		AfterEach(func() {

@@ -2,6 +2,7 @@ package helper
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"time"
 
@@ -18,6 +19,7 @@ import (
 
 type TestRunner interface {
 	Deploy(timeout time.Duration) error
+	DeployTLS(timeout time.Duration, crt, key []byte) error
 	Terminate() error
 	Exec(command ...string) (string, error)
 	TestRunnerAsync(args ...string) (io.Reader, chan struct{}, error)
@@ -122,13 +124,39 @@ func (t *testContainer) Terminate() error {
 		return errors.Wrapf(err, "deleting %s pod", t.echoName)
 	}
 	return nil
+}
 
+func (t *testContainer) DeleteService() error {
+	if err := testutils.Kubectl("delete", "service", "-n", t.namespace, t.echoName, "--grace-period=0"); err != nil {
+		return errors.Wrapf(err, "deleting %s service", t.echoName)
+	}
+	return nil
+}
+
+func (t *testContainer) TerminateAndDeleteService() error {
+	if err := t.Terminate(); err != nil {
+		return err
+	}
+	if err := t.DeleteService(); err != nil {
+		return err
+	}
+	return nil
 }
 
 // testContainer executes a command inside the testContainer container
 func (t *testContainer) Exec(command ...string) (string, error) {
 	args := append([]string{"exec", "-i", t.echoName, "-n", t.namespace, "--"}, command...)
 	return testutils.KubectlOut(args...)
+}
+
+// Cp copies files into the testContainer container
+func (t *testContainer) Cp(files map[string]string) error {
+	for k, v := range files {
+		if err := testutils.Kubectl("cp", k, fmt.Sprintf("%s/%s:%s", t.namespace, t.echoName, v)); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // TestContainerAsync executes a command inside the testContainer container

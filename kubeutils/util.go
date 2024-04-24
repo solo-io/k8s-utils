@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"strings"
+	"unicode"
 )
 
 // use SanitizeNameV2
@@ -28,23 +29,19 @@ func SanitizeName(name string) string {
 }
 
 func SanitizeNameV2(name string) string {
-	name = strings.Replace(name, "*", "-", -1)
-	name = strings.Replace(name, "/", "-", -1)
-	name = strings.Replace(name, ".", "-", -1)
-	name = strings.Replace(name, "[", "", -1)
-	name = strings.Replace(name, "]", "", -1)
-	name = strings.Replace(name, ":", "-", -1)
-	name = strings.Replace(name, "_", "-", -1)
-	name = strings.Replace(name, " ", "-", -1)
-	name = strings.Replace(name, "\n", "", -1)
-	name = strings.Replace(name, "\"", "", -1)
-	name = strings.Replace(name, "'", "", -1)
+	name = strings.Map(func(r rune) rune {
+		switch r {
+		case '*', '/', '.', ':', '_', ' ':
+			return '-'
+		case '[', ']', '\n', '"', '\'':
+			return -1
+		}
+		return unicode.ToLower(r)
+	}, name)
 	if len(name) > 63 {
 		hash := md5.Sum([]byte(name))
 		name = fmt.Sprintf("%s-%x", name[:31], hash)
 		name = name[:63]
 	}
-	name = strings.Replace(name, ".", "-", -1)
-	name = strings.ToLower(name)
 	return name
 }

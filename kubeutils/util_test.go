@@ -1,8 +1,11 @@
 package kubeutils
 
 import (
+	"time"
+
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gmeasure"
 )
 
 var _ = Describe("sanitize name", func() {
@@ -47,4 +50,16 @@ var _ = Describe("sanitize name", func() {
 		Entry("301a's", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-c73301b7b71679067b02cff4cdc5e70"),
 	)
+	It("SanitizeNameV2 efficiently", Serial, Label("measurement"), func() {
+		experiment := gmeasure.NewExperiment("Repaginating Books")
+		AddReportEntry(experiment.Name, experiment)
+
+		experiment.Sample(func(idx int) {
+			experiment.MeasureDuration("repagination", func() {
+				for i := 0; i < 1000; i++ {
+					SanitizeNameV2("sub []_---]_9da02_--_2")
+				}
+			})
+		}, gmeasure.SamplingConfig{N: 200, Duration: time.Minute})
+	})
 })

@@ -8,7 +8,7 @@ on:
   pull_request:
 
 env:
-  KUBE_VERSION: v1.28.0
+  KUBE_VERSION: v1.29.2
 
 jobs:
   test:

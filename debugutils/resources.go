@@ -48,7 +48,7 @@ func DefaultResourceCollector() (*resourceCollector, error) {
 	}
 
 	httpClient := http.Client{}
-	restMapper, err := apiutil.NewDiscoveryRESTMapper(cfg, &httpClient)
+	restMapper, err := apiutil.NewDynamicRESTMapper(cfg, &httpClient)
 	if err != nil {
 		return nil, eris.Wrapf(err, "unable to initialize %s", resourceCollectorStr)
 	}

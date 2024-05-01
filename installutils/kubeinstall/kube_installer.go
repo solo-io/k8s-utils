@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	apiv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
@@ -314,7 +315,8 @@ func (r *KubeInstaller) reconcileResources(ctx context.Context, installNamespace
 		"cache_total", len(r.cache.resources),
 	)
 
-	restMapper, err := apiutil.NewDiscoveryRESTMapper(r.cfg)
+	httpClient := http.Client{}
+	restMapper, err := apiutil.NewDynamicRESTMapper(r.cfg, &httpClient)
 	if err != nil {
 		return errors.Wrapf(err, "creating discovery rest mapper")
 	}

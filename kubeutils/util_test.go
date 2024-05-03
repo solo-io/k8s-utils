@@ -1,12 +1,40 @@
 package kubeutils
 
 import (
+	"crypto/md5"
+	"fmt"
+	"strings"
+	"testing"
 	"time"
+	"unicode/utf8"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gmeasure"
 )
+
+// Here for fuzz tests..
+func sanitizeNameV2Old(name string) string {
+	name = strings.Replace(name, "*", "-", -1)
+	name = strings.Replace(name, "/", "-", -1)
+	name = strings.Replace(name, ".", "-", -1)
+	name = strings.Replace(name, "[", "", -1)
+	name = strings.Replace(name, "]", "", -1)
+	name = strings.Replace(name, ":", "-", -1)
+	name = strings.Replace(name, "_", "-", -1)
+	name = strings.Replace(name, " ", "-", -1)
+	name = strings.Replace(name, "\n", "", -1)
+	name = strings.Replace(name, "\"", "", -1)
+	name = strings.Replace(name, "'", "", -1)
+	if len(name) > 63 {
+		hash := md5.Sum([]byte(name))
+		name = fmt.Sprintf("%s-%x", name[:31], hash)
+		name = name[:63]
+	}
+	name = strings.Replace(name, ".", "-", -1)
+	name = strings.ToLower(name)
+	return name
+}
 
 var _ = Describe("sanitize name", func() {
 
@@ -14,6 +42,7 @@ var _ = Describe("sanitize name", func() {
 		Expect(SanitizeNameV2(in)).To(Equal(out))
 	},
 		Entry("basic a", "abc", "abc"),
+		Entry("basic A", "Abc", "abc"),
 		Entry("basic b", "abc123", "abc123"),
 		Entry("subX *", "bb*", "bb-"),
 		Entry("sub *", "bb*b", "bb-b"),
@@ -63,3 +92,44 @@ var _ = Describe("sanitize name", func() {
 		}, gmeasure.SamplingConfig{N: 200, Duration: time.Minute})
 	})
 })
+
+func FuzzSanitizeNameParity(f *testing.F) {
+	// Random string < 63
+	f.Add("VirtualGateway-istio-ingressgateway-bookinfo-cluster-1-istio-ingressgateway-istio-gateway-ns-cluster-1-gloo-mesh-cluster-1-HTTPS.443-anything")
+	f.Add("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+	f.Add("abc")
+	f.Add("abc123")
+	f.Add("bb*")
+	f.Add("bb*b")
+	f.Add("bb/")
+	f.Add("bb/b")
+	f.Add("bb.")
+	f.Add("bb.b")
+	f.Add("bb[")
+	f.Add("bb[b")
+	f.Add("bb]")
+	f.Add("bb]b")
+	f.Add("bb:")
+	f.Add("bb:b")
+	f.Add("bb ")
+	f.Add("bb b")
+	f.Add("bb\n")
+	f.Add("bb\nb")
+	f.Add("aa\"")
+	f.Add("bb\"b")
+	f.Add("aa'")
+	f.Add("bb'b")
+	f.Add("jfdklanfkljasfhjhldacaslkhdfkjshfkjsadhfkjasdhgjadhgkdahfjkdahjfdsagdfhjdsagfhasjdfsdfasfsafsdf")
+
+	f.Fuzz(func(t *testing.T, a string) {
+		// we can only  get a valid kube name that's alphanumeric
+		if !utf8.Valid([]byte(a)) {
+			t.Skip("Skipping non-valid utf8 input")
+		}
+		oldName := SanitizeNameV2(a)
+		newName := sanitizeNameV2Old(a)
+		if oldName != newName {
+			t.Fatalf("SanitizeNameV2(%s) = %s, SanitizeNameV2Old(%s) = %s", a, oldName, a, newName)
+		}
+	})
+}

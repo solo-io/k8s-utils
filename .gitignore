@@ -24,3 +24,4 @@ junit*.xml
 *cov
 
 *.test
+kubeutils/testdata/fuzz/

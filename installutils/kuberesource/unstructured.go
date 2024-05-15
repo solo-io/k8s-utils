@@ -166,6 +166,8 @@ func ConvertUnstructured(res *unstructured.Unstructured) (runtime.Object, error)
 		obj = &rbac.RoleBinding{TypeMeta: typeMeta}
 	case "Job":
 		obj = &batch.Job{TypeMeta: typeMeta}
+	case "CronJob":
+		obj = &batch.CronJob{TypeMeta: typeMeta}
 	case "ConfigMap":
 		obj = &core.ConfigMap{TypeMeta: typeMeta}
 	case "Service":

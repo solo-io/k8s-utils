@@ -13,17 +13,21 @@ import (
 	"github.com/solo-io/go-utils/testutils/kubectl"
 )
 
+var (
+	DefaultCurlImage = Image{
+		Registry:   "curlimages",
+		Repository: "curl",
+		Tag:        "",
+		Digest:     "aa45e9d93122a3cfdf8d7de272e2798ea63733eeee6d06bd2ee4f2f8c4027d7c",
+		PullPolicy: "IfNotPresent",
+	}
+)
+
 func CurlWithEphemeralPod(ctx context.Context, logger io.Writer, kubeContext, fromns, frompod string, args ...string) string {
 	execParams := EphemeralPodParams{
-		Logger:      logger,
-		KubeContext: kubeContext,
-		Image: Image{
-			Registry:   "curlimages",
-			Repository: "curl",
-			Tag:        "",
-			Digest:     "aa45e9d93122a3cfdf8d7de272e2798ea63733eeee6d06bd2ee4f2f8c4027d7c",
-			PullPolicy: "IfNotPresent",
-		},
+		Logger:        logger,
+		KubeContext:   kubeContext,
+		Image:         DefaultCurlImage,
 		FromContainer: "curl",
 		FromNamespace: fromns,
 		FromPod:       frompod,

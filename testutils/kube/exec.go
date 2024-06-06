@@ -46,7 +46,7 @@ type EphemeralPodParams struct {
 	Stderr        io.Writer
 }
 
-func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) string {
+func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) (string, error) {
 	createargs := []string{
 		"debug",
 		"--quiet",
@@ -84,7 +84,7 @@ func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) string
 	}
 
 	kParams.Args = append(execArgs, params.Args...)
-	return mustExecute(ctx, KubectlParams{
+	return execute(ctx, KubectlParams{
 		KubectlCmdParams: kParams,
 		KubeContext:      params.KubeContext,
 		Logger:           params.Logger,

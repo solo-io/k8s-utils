@@ -30,7 +30,8 @@ func CurlWithEphemeralPod(ctx context.Context, logger io.Writer, kubeContext, fr
 		ExecCmdPath:   "curl",
 		Args:          args,
 	}
-	return ExecFromEphemeralPod(ctx, execParams)
+	out, _ := ExecFromEphemeralPod(ctx, execParams)
+	return out
 }
 
 // labelSelector is a string map e.g. gloo=gateway-proxy

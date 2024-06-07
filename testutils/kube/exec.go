@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	"github.com/solo-io/go-utils/testutils/kubectl"
 )
@@ -74,6 +75,10 @@ func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) (strin
 		KubeContext:      params.KubeContext,
 		Logger:           params.Logger,
 	})
+
+	// this smells; fix it
+	// wait so the ephemeral container has a chance to be created before attempting to exec against it
+	time.Sleep(time.Second)
 
 	execArgs := []string{
 		"exec",

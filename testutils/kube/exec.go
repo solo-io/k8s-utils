@@ -50,7 +50,7 @@ func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) (strin
 	createargs := []string{
 		"debug",
 		"--quiet",
-		params.Image.String(),
+		fmt.Sprintf("--image=%s", params.Image),
 		fmt.Sprintf("--container=%s", params.FromContainer),
 		fmt.Sprintf("--image-pull-policy=%s", params.Image.PullPolicy),
 		params.FromPod,

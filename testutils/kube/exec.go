@@ -78,7 +78,7 @@ func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) (strin
 
 	// this smells; fix it
 	// wait so the ephemeral container has a chance to be created before attempting to exec against it
-	time.Sleep(time.Second)
+	time.Sleep(time.Second * 5)
 
 	execArgs := []string{
 		"exec",

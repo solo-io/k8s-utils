@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
-	"time"
 
+	"github.com/onsi/gomega"
 	"github.com/solo-io/go-utils/testutils/kubectl"
 )
 
@@ -76,9 +76,14 @@ func ExecFromEphemeralPod(ctx context.Context, params EphemeralPodParams) (strin
 		Logger:           params.Logger,
 	})
 
-	// this smells; fix it
-	// wait so the ephemeral container has a chance to be created before attempting to exec against it
-	time.Sleep(time.Second * 5)
+	// Assert that eventually the ephemeral container is created before attempting to exec against it
+	gomega.Eventually(func(g gomega.Gomega) {
+		out, err := kubectl.KubectlOut(ctx, kubectl.Params{
+			Args: []string{"get", "pod", "-n", params.FromNamespace, params.FromPod, "-o=jsonpath='{.status.ephemeralContainerStatuses[*].name}'"},
+		})
+		g.Expect(err).ToNot(gomega.HaveOccurred())
+		g.Expect(out).To(gomega.ContainSubstring(params.FromContainer))
+	}).Should(gomega.Succeed())
 
 	execArgs := []string{
 		"exec",

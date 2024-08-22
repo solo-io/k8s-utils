@@ -1,0 +1,11 @@
+changelog:
+- type: BREAKING_CHANGE
+  description: >
+    Bump dependencies to support Kubernetes 1.31
+  issueLink: https://github.com/solo-io/gloo/issues/9683
+  resolvesIssue: false
+- type: DEPENDENCY_BUMP
+  dependencyOwner: k8s.io
+  dependencyRepo: api
+  dependencyTag: v0.31.0
+  

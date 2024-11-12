@@ -7,11 +7,11 @@ import (
 	"sort"
 
 	jsonpatch "github.com/evanphx/json-patch"
+	"github.com/pkg/errors"
 	"github.com/rotisserie/eris"
 	"github.com/solo-io/go-utils/contextutils"
 	"github.com/solo-io/k8s-utils/kubeutils"
-
-	"github.com/pkg/errors"
+	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	"k8s.io/api/admissionregistration/v1beta1"
 	appsv1 "k8s.io/api/apps/v1"
 	appsv1beta2 "k8s.io/api/apps/v1beta2"
@@ -204,6 +204,8 @@ func ConvertUnstructured(res *unstructured.Unstructured) (runtime.Object, error)
 		obj = &v1beta1.MutatingWebhookConfiguration{TypeMeta: typeMeta}
 	case "HorizontalPodAutoscaler":
 		obj = &autoscaling.HorizontalPodAutoscaler{TypeMeta: typeMeta}
+	case "ValidatingWebhookConfiguration":
+		obj = &admissionregistrationv1.ValidatingWebhookConfiguration{TypeMeta: typeMeta}
 	default:
 		return nil, eris.Errorf("cannot convert kind %v", kind)
 	}

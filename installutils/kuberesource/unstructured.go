@@ -204,7 +204,7 @@ func ConvertUnstructured(res *unstructured.Unstructured) (runtime.Object, error)
 		obj = &v1beta1.MutatingWebhookConfiguration{TypeMeta: typeMeta}
 	case "HorizontalPodAutoscaler":
 		obj = &autoscaling.HorizontalPodAutoscaler{TypeMeta: typeMeta}
-	case "ValidatingConfigurationWebhook":
+	case "ValidatingWebhookConfiguration":
 		obj = &admissionregistrationv1.ValidatingWebhookConfiguration{TypeMeta: typeMeta}
 	default:
 		return nil, eris.Errorf("cannot convert kind %v", kind)

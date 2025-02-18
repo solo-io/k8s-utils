@@ -58,7 +58,7 @@ func (i *installer) Install(ctx context.Context, installerConfig *types.Installe
 	}
 
 	if !installerConfig.DryRun && installerConfig.PreInstallMessage != "" {
-		fmt.Fprintf(i.out, installerConfig.PreInstallMessage)
+		fmt.Fprint(i.out, installerConfig.PreInstallMessage)
 	} else {
 		i.defaultPreInstallMessage(installerConfig)
 	}
@@ -106,7 +106,7 @@ func (i *installer) Install(ctx context.Context, installerConfig *types.Installe
 		return err
 	}
 	if !installerConfig.DryRun && installerConfig.PostInstallMessage != "" {
-		fmt.Fprintf(i.out, installerConfig.PostInstallMessage)
+		fmt.Fprint(i.out, installerConfig.PostInstallMessage)
 	} else {
 		i.defaultPostInstallMessage(installerConfig)
 	}
@@ -116,7 +116,7 @@ func (i *installer) Install(ctx context.Context, installerConfig *types.Installe
 	}
 
 	if installerConfig.DryRun {
-		fmt.Fprintf(i.out, rel.Manifest)
+		fmt.Fprint(i.out, rel.Manifest)
 	}
 
 	return nil

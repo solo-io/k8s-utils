@@ -19,7 +19,7 @@ func KubeDumpOnFail(out io.Writer, namespaces []string, additionalCommands Names
 		if err != nil {
 			fmt.Fprintf(out, "getting kube dump failed: %v", err)
 		}
-		fmt.Fprintf(out, dump)
+		fmt.Fprint(out, dump)
 	}
 }
 

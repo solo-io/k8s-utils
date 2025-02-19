@@ -1,6 +1,6 @@
 module github.com/solo-io/k8s-utils
 
-go 1.23.0
+go 1.24
 
 require (
 	github.com/avast/retry-go v2.2.0+incompatible
@@ -16,7 +16,7 @@ require (
 	github.com/onsi/gomega v1.35.1
 	github.com/pkg/errors v0.9.1
 	github.com/rotisserie/eris v0.1.1
-	github.com/solo-io/go-utils v0.27.4
+	github.com/solo-io/go-utils v0.28.4
 	github.com/spf13/afero v1.6.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/sync v0.8.0

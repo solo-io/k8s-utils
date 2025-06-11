@@ -36,3 +36,7 @@ changelog:
   dependencyOwner: helm
   dependencyRepo: helm
   dependencyTag: v3.17.3
+- type: DEPENDENCY_BUMP
+  dependencyOwner: moby
+  dependencyRepo: moby
+  dependencyTag: v28.2.2

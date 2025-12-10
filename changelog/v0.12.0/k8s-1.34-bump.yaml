@@ -36,3 +36,8 @@ changelog:
   dependencyOwner: helm
   dependencyRepo: helm
   dependencyTag: v3.19.2
+- type: DEPENDENCY_BUMP
+  dependencyOwner: golang
+  dependencyRepo: go
+  dependencyTag: v1.25.5
+
